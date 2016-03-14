@@ -2,14 +2,11 @@ module Tests where
 
 import ElmTest exposing (..)
 
-import String
-
-import Greetings.HelloWorldTests
+import UpdateTests
 
 all : Test
 all =
-  suite "All Tests"
+  suite "Tic Tac Toe tests"
     [
-      test "Example test" (assert True),
-      Greetings.HelloWorldTests.all
+      UpdateTests.all
     ]
