@@ -1,0 +1,10 @@
+language: node_js
+node_js: stable
+install:
+  - npm install -g elm
+  - npm install -g elm-test
+  - elm-package install -y
+script: elm-test TestRunner.elm
+cache:
+  directories:
+    - elm-stuff
