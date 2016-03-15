@@ -12,7 +12,7 @@ all =
       suite "Making a move" <|
         let
           player = X
-          initialState = GameState player []
+          initialState = GameState 3 player []
           coordinates = Coordinates 0 0
         in
           [
