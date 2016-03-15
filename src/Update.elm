@@ -1,6 +1,6 @@
 module Update where
 
-import Model exposing (..)
+import Model exposing (GameState, Coordinates, Move, other)
 
 makeMove : Coordinates -> GameState -> GameState
 makeMove coordinates state =

@@ -4,7 +4,5 @@ import Model
 import Update
 import View
 
-initialGameState = Model.GameState Model.X []
-
 main =
-  start { model = initialGameState, update = Update.makeMove, view = View.render }
+  start { model = Model.initialGameState, update = Update.makeMove, view = View.render }
