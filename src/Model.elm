@@ -19,7 +19,7 @@ type alias GameState = {
 }
 
 initialGameState : GameState
-initialGameState = GameState 3 X [ Move (Coordinates 0 0) X]
+initialGameState = GameState 3 X []
 
 other : Player -> Player
 other player =
