@@ -16,44 +16,48 @@ import Model exposing (Player (X, O), GameState, Coordinates, Move)
 
 render : Signal.Address Coordinates -> GameState -> Html.Html
 render coordinates gameState =
-  Html.fromElement <| container (boardWidth + 100) (boardWidth + 100) middle <| drawGameBoard gameState
-
-boardSize = 3
-boardWidth = boardSize * boardSpaceSize + (boardSize + 1) * boardSpaceMargin
+  let
+    board = drawGameBoard gameState
+    containerWidth = (calculateBoardWidth gameState) + 100
+  in
+    Html.fromElement <| container containerWidth containerWidth middle board
 
 drawGameBoard : GameState -> Graphics.Element.Element
 drawGameBoard gameState =
   let
-    background = filled boardBackgroundColor <| square boardWidth
+    boardWidth = calculateBoardWidth gameState
+    background = filled boardBackgroundColor <| square <| toFloat <| calculateBoardWidth gameState
   in
     collage boardWidth boardWidth <| background :: (createBoardSpaces gameState)
+
+calculateBoardWidth : GameState -> Int
+calculateBoardWidth gameState =
+  gameState.boardSize * boardSpaceSize + (gameState.boardSize + 1) * boardSpaceMargin
 
 createBoardSpaces : GameState -> List Graphics.Collage.Form
 createBoardSpaces gameState =
   let
     boardCoordinates = Model.boardCoordinates gameState
   in
-    List.map2
-      positionBoardSpacesInGrid
-      (List.map (\spaceCoordinates -> drawBoardSpace spaceCoordinates gameState) boardCoordinates)
-      boardCoordinates
+    List.map (\coordinates -> createBoardSpace coordinates gameState) boardCoordinates
 
-positionBoardSpacesInGrid : Graphics.Element.Element -> Coordinates -> Graphics.Collage.Form
-positionBoardSpacesInGrid space coordinates =
-  let
-    gridCellSize = boardSpaceSize + boardSpaceMargin
-    horizontalShift = gridCellSize * ((toFloat coordinates.row) - (boardSize - 1) / 2)
-    verticalShift = -1 * gridCellSize * ((toFloat coordinates.col) - (boardSize - 1) / 2)
-  in
-    move (horizontalShift, verticalShift) <| toForm <| space
-
-drawBoardSpace : Coordinates -> GameState -> Graphics.Element.Element
-drawBoardSpace coordinates gameState =
+createBoardSpace : Coordinates -> GameState -> Graphics.Collage.Form
+createBoardSpace coordinates gameState =
   let
     background = filled boardSpaceColor <| square boardSpaceSize
     playerMark = createPlayerMark <| Model.playerWhoMovedAt coordinates gameState
+    moveToPositionInBoard = positionSpaceInBoard gameState.boardSize coordinates
   in
-    collage boardSpaceSize boardSpaceSize [ background, playerMark ]
+    moveToPositionInBoard <| collage boardSpaceSize boardSpaceSize [ background, playerMark ]
+
+positionSpaceInBoard : Int -> Coordinates -> Graphics.Element.Element -> Graphics.Collage.Form
+positionSpaceInBoard boardSize coordinates boardSpace =
+  let
+    gridCellSize = boardSpaceSize + boardSpaceMargin
+    horizontalShift = toFloat <| gridCellSize * (coordinates.row - (boardSize - 1) // 2)
+    verticalShift = toFloat <| -1 * gridCellSize * (coordinates.col - (boardSize - 1) // 2)
+  in
+    move (horizontalShift, verticalShift) <| toForm <| boardSpace
 
 createPlayerMark : Maybe Player -> Graphics.Collage.Form
 createPlayerMark player =
