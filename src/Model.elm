@@ -2,6 +2,8 @@ module Model where
 
 type Player = X | O
 
+type Status = InProgress | Tied | Won Player
+
 type alias Coordinates = {
   row : Int,
   col : Int
@@ -15,17 +17,12 @@ type alias Move = {
 type alias GameState = {
   boardSize : Int,
   currentPlayer : Player,
-  movesSoFar : List Move
+  movesSoFar : List Move,
+  status : Status
 }
 
 initialGameState : GameState
-initialGameState = GameState 3 X []
-
-other : Player -> Player
-other player =
-  case player of
-    X -> O
-    O -> X
+initialGameState = GameState 3 X [] InProgress
 
 boardCoordinates : GameState -> List Coordinates
 boardCoordinates gameState =
