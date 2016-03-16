@@ -10,11 +10,12 @@ import Model exposing (
 makeMove : Coordinates -> GameState -> GameState
 makeMove coordinates gameState =
   case Model.playerWhoMovedAt coordinates gameState of
-    Just _ -> gameState
-    Nothing -> {
-        gameState |
-          currentPlayer = otherPlayer gameState.currentPlayer,
-          movesSoFar = Move coordinates gameState.currentPlayer :: gameState.movesSoFar
+    Just _ ->
+      gameState
+    Nothing ->
+      { gameState |
+        currentPlayer = otherPlayer gameState.currentPlayer,
+        movesSoFar = Move coordinates gameState.currentPlayer :: gameState.movesSoFar
       }
 
 otherPlayer : Player -> Player
@@ -38,8 +39,11 @@ winningPlayer gameState =
 
 isGameOver : GameState -> Bool
 isGameOver gameState =
-  List.any (isWinningLine gameState.boardSize) (getLines gameState)
-    || (gameState.boardSize^2) == (List.length gameState.movesSoFar)
+  let
+    isGameWon = List.any (isWinningLine gameState.boardSize) (getLines gameState)
+    isGameTied = (gameState.boardSize^2) == (List.length gameState.movesSoFar)
+  in
+    isGameWon || isGameTied
 
 isWinningLine : Int -> List Move -> Bool
 isWinningLine lineLength line =
@@ -54,11 +58,10 @@ getLines gameState =
   let
     maxIndex = gameState.boardSize - 1
     moves = gameState.movesSoFar
-    indices = [0..maxIndex]
   in
-    List.concat [
-      List.map (\row-> List.filter (\move -> move.coordinates.row == row) moves) indices,
-      List.map (\col-> List.filter (\move -> move.coordinates.col == col) moves) indices,
-      [ List.filter (\move -> move.coordinates.row == move.coordinates.col) moves ],
-      [ List.filter (\move -> move.coordinates.row + move.coordinates.col == maxIndex) moves ]
-    ]
+    List.concat
+      [ List.map (\row-> List.filter (\move -> move.coordinates.row == row) moves) [0..maxIndex]
+      , List.map (\col-> List.filter (\move -> move.coordinates.col == col) moves) [0..maxIndex]
+      , [ List.filter (\move -> move.coordinates.row == move.coordinates.col) moves ]
+      , [ List.filter (\move -> move.coordinates.row + move.coordinates.col == maxIndex) moves ]
+      ]
