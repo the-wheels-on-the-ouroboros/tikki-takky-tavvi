@@ -4,19 +4,34 @@ import Model exposing (
     GameState,
     Coordinates,
     Move,
-    Player(X, O)
+    Player(X, O),
+    Status(InProgress, Tied, Won)
   )
 
 makeMove : Coordinates -> GameState -> GameState
 makeMove coordinates gameState =
-  case Model.playerWhoMovedAt coordinates gameState of
-    Just _ ->
-      gameState
-    Nothing ->
+  let
+    newGameState =
       { gameState |
         currentPlayer = otherPlayer gameState.currentPlayer,
         movesSoFar = Move coordinates gameState.currentPlayer :: gameState.movesSoFar
       }
+  in
+    case Model.playerWhoMovedAt coordinates gameState of
+      Just _ ->
+        gameState
+      Nothing ->
+        updateGameStatus newGameState
+
+updateGameStatus : GameState -> GameState
+updateGameStatus gameState =
+  case winningPlayer gameState of
+    Just player ->
+      { gameState | status = Won player }
+    Nothing ->
+      if isGameOver gameState
+        then { gameState | status = Tied }
+        else { gameState | status = InProgress }
 
 otherPlayer : Player -> Player
 otherPlayer player =

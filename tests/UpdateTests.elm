@@ -37,6 +37,37 @@ all =
           gameState = GameState 3 (otherPlayer X) [ Move (Coordinates 0 0) X ] InProgress
         in
           assertEqual gameState (makeMove (Coordinates 0 0) gameState)
+
+      , test "Returns a game state with status InProgress if game is not over after move is made" <|
+        assertEqual InProgress (makeMove (Coordinates 0 0) (GameState 3 X [] InProgress)).status
+
+      , test "Returns a game state with status Tied if game is tied after move is made" <|
+        let
+          moves =
+            [ Move (Coordinates 0 0) X, Move (Coordinates 0 1) X, Move (Coordinates 0 2) O
+            , Move (Coordinates 1 0) O, Move (Coordinates 1 1) O, Move (Coordinates 1 2) X
+            , Move (Coordinates 2 0) X, Move (Coordinates 2 1) O
+            ]
+        in
+          assertEqual Tied (makeMove (Coordinates 2 2) (GameState 3 X moves InProgress)).status
+
+      , test "Returns a game state with status Won X if player X won the game" <|
+        let
+          moves =
+            [ Move (Coordinates 0 0) X, Move (Coordinates 0 1) X
+            , Move (Coordinates 1 0) O, Move (Coordinates 1 1) O
+            ]
+        in
+          assertEqual (Won X) (makeMove (Coordinates 0 2) (GameState 3 X moves InProgress)).status
+
+      , test "Returns a game state with status Won O if player O won the game" <|
+        let
+          moves =
+            [ Move (Coordinates 0 0) O, Move (Coordinates 0 1) O
+            , Move (Coordinates 1 0) X, Move (Coordinates 1 1) X
+            ]
+        in
+          assertEqual (Won O) (makeMove (Coordinates 0 2) (GameState 3 O moves InProgress)).status
       ]
       , suite "Getting the other player"
 
