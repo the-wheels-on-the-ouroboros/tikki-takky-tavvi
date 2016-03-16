@@ -9,7 +9,7 @@ import Model exposing (
     Player (X, O),
     Status (InProgress, Tied, Won)
   )
-import Update exposing (makeMove)
+import Update exposing (makeMove, isGameOver)
 
 all : Test
 all =
@@ -45,5 +45,41 @@ all =
                   test "Returns an unchanged game state" <|
                     assertEqual gameState <| makeMove targetCoordinates gameState
                 ]
-          ]
+          ],
+      suite "Checking if the game is over" <|
+
+        [ test "Returns true if a player has won" <|
+          let
+            moves = [
+              Move (Coordinates 0 0) X, Move (Coordinates 0 1) X, Move (Coordinates 0 2) X,
+              Move (Coordinates 1 0) O, Move (Coordinates 1 1) O
+            ]
+            gameState = GameState 3 O moves InProgress
+          in
+            assertEqual True <| isGameOver gameState
+
+        , test "Returns true if the game ended in a tie" <|
+          let
+            moves = [
+              Move (Coordinates 0 0) X, Move (Coordinates 0 1) X, Move (Coordinates 0 2) O,
+              Move (Coordinates 1 0) O, Move (Coordinates 1 1) O, Move (Coordinates 1 2) X,
+              Move (Coordinates 2 0) X, Move (Coordinates 2 1) O, Move (Coordinates 2 2) X
+            ]
+            gameState = GameState 3 O moves InProgress
+          in
+            assertEqual True <| isGameOver gameState
+
+        , test "Returns false if no moves have been made" <|
+            assertEqual False <| isGameOver <| GameState 3 X [] InProgress
+
+        , test "Returns false if the game has not been won or tied" <|
+          let
+            moves = [
+              Move (Coordinates 0 0) X, Move (Coordinates 0 1) O, Move (Coordinates 0 2) X,
+              Move (Coordinates 1 0) O, Move (Coordinates 1 1) X
+            ]
+            gameState = GameState 3 O moves InProgress
+          in
+            assertEqual False <| isGameOver gameState
+        ]
     ]
