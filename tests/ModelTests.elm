@@ -2,7 +2,16 @@ module ModelTests where
 
 import ElmTest exposing (..)
 
-import Model exposing (..)
+import Model exposing (
+    GameState,
+    Coordinates,
+    Move,
+    Player (X, O),
+    Status (InProgress, Tied, Won),
+    boardCoordinates,
+    playerWhoMovedAt,
+    other
+  )
 
 all : Test
 all =

@@ -9,7 +9,7 @@ import Model exposing (
     Player (X, O),
     Status (InProgress, Tied, Won)
   )
-import Update exposing (..)
+import Update exposing (makeMove)
 
 all : Test
 all =
