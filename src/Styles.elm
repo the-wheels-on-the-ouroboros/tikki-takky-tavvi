@@ -21,13 +21,13 @@ spaceSize = 100
 
 spaceMarkStyle : Text.Style
 spaceMarkStyle =
-  { typeface = [ "Helvetica Neue", "Arial", "sans-serif" ]
-  , height = Just <| 50
-  , color = orange
-  , bold = True
-  , italic = False
-  , line = Nothing
-  }
+    { typeface = [ "Helvetica Neue", "Arial", "sans-serif" ]
+    , height = Just <| 50
+    , color = orange
+    , bold = True
+    , italic = False
+    , line = Nothing
+    }
 
 
 blue : Color

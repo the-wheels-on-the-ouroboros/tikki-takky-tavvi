@@ -6,8 +6,8 @@ import View
 
 
 main =
-  start
-    { model = Model.initialGameState
-    , update = Update.makeMove
-    , view = View.render
-    }
+    start
+        { model = Model.initialGameState
+        , update = Update.makeMove
+        , view = View.render
+        }
