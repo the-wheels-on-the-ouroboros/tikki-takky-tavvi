@@ -2,7 +2,13 @@ module UpdateTests where
 
 import ElmTest exposing (..)
 
-import Model exposing (GameState, Coordinates, Move, Player (X, O))
+import Model exposing (
+    GameState,
+    Coordinates,
+    Move,
+    Player (X, O),
+    Status (InProgress, Tied, Won)
+  )
 import Update exposing (..)
 
 all : Test
@@ -17,7 +23,7 @@ all =
           [
             suite "When a move has not been made at target coordinates" <|
               let
-                gameState = GameState 3 player []
+                gameState = GameState 3 player [] InProgress
               in
                 [
                   test "Records the move made in a new game state" <|
@@ -32,7 +38,8 @@ all =
                 ],
             suite "When a move has already been made at target coordinates" <|
               let
-                gameState = GameState 3 (Model.other player) [ Move targetCoordinates player ]
+                preexistingMove = Move targetCoordinates player
+                gameState = GameState 3 (Model.other player) [ preexistingMove ] InProgress
               in
                 [
                   test "Returns an unchanged game state" <|
