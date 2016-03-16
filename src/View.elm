@@ -8,54 +8,49 @@ import Styles exposing (
     boardBackgroundColor
   )
 import Graphics.Collage exposing (collage, square, filled, toForm, move)
-import Graphics.Element exposing (centered, container, middle, down, flow)
+import Graphics.Element exposing (centered, container, middle, down, right, flow)
+import Graphics.Input exposing (clickable)
 import Html
 import Text
 
 import Model exposing (Player (X, O), GameState, Coordinates, Move)
 
 render : Signal.Address Coordinates -> GameState -> Html.Html
-render coordinates gameState =
-  Html.fromElement <| container (boardWidth + 100) (boardWidth + 100) middle <| drawGameBoard gameState
-
-boardSize = 3
-boardWidth = boardSize * boardSpaceSize + (boardSize + 1) * boardSpaceMargin
-
-drawGameBoard : GameState -> Graphics.Element.Element
-drawGameBoard gameState =
+render moveAddress gameState =
   let
-    background = filled boardBackgroundColor <| square boardWidth
+    containerWidth = (gameState.boardSize + 1) * (boardSpaceMargin + boardSpaceSize)
+    gameBoard = drawGameBoard moveAddress gameState
   in
-    collage boardWidth boardWidth <| background :: (createBoardSpaces gameState)
+    Html.fromElement <| container containerWidth containerWidth middle gameBoard
 
-createBoardSpaces : GameState -> List Graphics.Collage.Form
-createBoardSpaces gameState =
+drawGameBoard : Signal.Address Coordinates -> GameState -> Graphics.Element.Element
+drawGameBoard moveAddress gameState =
+  flow down <| List.map (flow right) <| createBoardSpaces moveAddress gameState
+
+createBoardSpaces : Signal.Address Coordinates -> GameState -> List (List Graphics.Element.Element)
+createBoardSpaces moveAddress gameState =
   let
     boardCoordinates = Model.boardCoordinates gameState
+    coordinatesForRow = \coordinates row -> List.filter (\c -> c.row == row) coordinates
+    partitionedCoordinatesByRow =
+      List.map (coordinatesForRow boardCoordinates) [0..(gameState.boardSize - 1)]
   in
-    List.map2
-      positionBoardSpacesInGrid
-      (List.map (\spaceCoordinates -> drawBoardSpace spaceCoordinates gameState) boardCoordinates)
-      boardCoordinates
+    List.map
+      (List.map (\coordinates -> createBoardSpace coordinates moveAddress gameState))
+      partitionedCoordinatesByRow
 
-positionBoardSpacesInGrid : Graphics.Element.Element -> Coordinates -> Graphics.Collage.Form
-positionBoardSpacesInGrid space coordinates =
+createBoardSpace : Coordinates -> Signal.Address Coordinates -> GameState -> Graphics.Element.Element
+createBoardSpace coordinates moveAddress gameState =
   let
-    gridCellSize = boardSpaceSize + boardSpaceMargin
-    horizontalShift = gridCellSize * ((toFloat coordinates.row) - (boardSize - 1) / 2)
-    verticalShift = -1 * gridCellSize * ((toFloat coordinates.col) - (boardSize - 1) / 2)
-  in
-    move (horizontalShift, verticalShift) <| toForm <| space
-
-drawBoardSpace : Coordinates -> GameState -> Graphics.Element.Element
-drawBoardSpace coordinates gameState =
-  let
+    paddedSize = boardSpaceSize + boardSpaceMargin
+    padding = filled boardBackgroundColor <| square paddedSize
     background = filled boardSpaceColor <| square boardSpaceSize
-    playerMark = createPlayerMark <| Model.playerWhoMovedAt coordinates gameState
+    playerMark = toForm <| createPlayerMark <| Model.playerWhoMovedAt coordinates gameState
   in
-    collage boardSpaceSize boardSpaceSize [ background, playerMark ]
+    collage paddedSize paddedSize [ padding, background, playerMark ]
+      |> clickable (Signal.message moveAddress coordinates)
 
-createPlayerMark : Maybe Player -> Graphics.Collage.Form
+createPlayerMark : Maybe Player -> Graphics.Element.Element
 createPlayerMark player =
   let
     playerString = case player of
@@ -63,4 +58,4 @@ createPlayerMark player =
       Just O -> "O"
       Nothing -> " "
   in
-    toForm <| centered <| Text.style boardSpaceMarkStyle <| Text.fromString playerString
+    centered <| Text.style boardSpaceMarkStyle <| Text.fromString playerString
