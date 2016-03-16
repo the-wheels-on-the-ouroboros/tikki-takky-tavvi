@@ -1,12 +1,13 @@
 module Update where
 
 import Model exposing (
-    GameState,
     Coordinates,
+    GameState,
     Move,
     Player(X, O),
     Status(InProgress, Tied, Won)
   )
+
 
 makeMove : Coordinates -> GameState -> GameState
 makeMove coordinates gameState =
@@ -20,6 +21,7 @@ makeMove coordinates gameState =
     _ ->
       gameState
 
+
 updateGameStatus : GameState -> GameState
 updateGameStatus gameState =
   case winningPlayer gameState of
@@ -30,11 +32,13 @@ updateGameStatus gameState =
         then { gameState | status = Tied }
         else { gameState | status = InProgress }
 
+
 otherPlayer : Player -> Player
 otherPlayer player =
   case player of
     X -> O
     O -> X
+
 
 winningPlayer : GameState -> Maybe Player
 winningPlayer gameState =
@@ -46,6 +50,7 @@ winningPlayer gameState =
       []::_ -> Nothing
       [] -> Nothing
 
+
 isGameOver : GameState -> Bool
 isGameOver gameState =
   let
@@ -54,6 +59,7 @@ isGameOver gameState =
   in
     isGameWon || isGameTied
 
+
 isWinningLine : Int -> List Move -> Bool
 isWinningLine lineLength line =
   case line of
@@ -61,6 +67,7 @@ isWinningLine lineLength line =
       (List.length line) == lineLength && List.all (\move -> move.player == firstMove.player) line
     _ ->
       False
+
 
 getLines : GameState -> List (List Move)
 getLines gameState =

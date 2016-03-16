@@ -3,15 +3,15 @@ module UpdateTests where
 import ElmTest exposing (..)
 
 import Model exposing (
-    GameState,
     Coordinates,
+    GameState,
     Move,
     Player (X, O),
     Status (InProgress, Tied, Won)
   )
 import Update exposing (
-    makeMove,
     isGameOver,
+    makeMove,
     otherPlayer,
     winningPlayer
   )
@@ -28,9 +28,9 @@ all =
           (makeMove (Coordinates 0 0) (GameState 3 X [] InProgress)).movesSoFar
 
       , test "Returns a game state in which the other player is now the current player" <|
-        assertEqual
-          (otherPlayer X)
-          (makeMove (Coordinates 0 0) (GameState 3 X [] InProgress)).currentPlayer
+        assertEqual (otherPlayer X)
+          <| .currentPlayer
+          <| makeMove (Coordinates 0 0) (GameState 3 X [] InProgress)
 
       , test "Returns an unchanged game state when a move has already been made at coordinates" <|
         let
@@ -53,7 +53,9 @@ all =
       , suite "Updating the game status"
 
         [ test "Returns a game state with status InProgress if game is not over after move is made" <|
-          assertEqual InProgress (makeMove (Coordinates 0 0) (GameState 3 X [] InProgress)).status
+          assertEqual InProgress
+            <| .status
+            <| makeMove (Coordinates 0 0) (GameState 3 X [] InProgress)
 
         , test "Returns a game state with status Tied if game is tied after move is made" <|
           let
@@ -63,7 +65,9 @@ all =
               , Move (Coordinates 2 0) X, Move (Coordinates 2 1) O
               ]
           in
-            assertEqual Tied (makeMove (Coordinates 2 2) (GameState 3 X moves InProgress)).status
+            assertEqual Tied
+              <| .status
+              <| makeMove (Coordinates 2 2) (GameState 3 X moves InProgress)
 
         , test "Returns a game state with status Won X if player X won the game" <|
           let
@@ -72,7 +76,9 @@ all =
               , Move (Coordinates 1 0) O, Move (Coordinates 1 1) O
               ]
           in
-            assertEqual (Won X) (makeMove (Coordinates 0 2) (GameState 3 X moves InProgress)).status
+            assertEqual (Won X)
+              <| .status
+              <| makeMove (Coordinates 0 2) (GameState 3 X moves InProgress)
 
         , test "Returns a game state with status Won O if player O won the game" <|
           let
@@ -81,7 +87,9 @@ all =
               , Move (Coordinates 1 0) X, Move (Coordinates 1 1) X
               ]
           in
-            assertEqual (Won O) (makeMove (Coordinates 0 2) (GameState 3 O moves InProgress)).status
+            assertEqual (Won O)
+              <| .status
+              <| makeMove (Coordinates 0 2) (GameState 3 O moves InProgress)
         ]
       ]
       , suite "Getting the other player"
