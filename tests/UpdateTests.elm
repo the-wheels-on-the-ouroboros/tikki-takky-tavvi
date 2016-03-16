@@ -16,6 +16,19 @@ import Update exposing (
         winningPlayer
     )
 
+
+playerMove : Player -> Int -> Int -> Move
+playerMove player row col = Move (Coordinates row col) player
+
+
+x : Int -> Int -> Move
+x row col = playerMove X row col
+
+
+o : Int -> Int -> Move
+o row col = playerMove O row col
+
+
 all : Test
 all =
     suite "Updating the game model"
@@ -63,9 +76,9 @@ all =
                 , test "Game state has status Tied if game is tied after move is made" <|
                     let
                         moves =
-                            [ Move (Coordinates 0 0) X, Move (Coordinates 0 1) X, Move (Coordinates 0 2) O
-                            , Move (Coordinates 1 0) O, Move (Coordinates 1 1) O, Move (Coordinates 1 2) X
-                            , Move (Coordinates 2 0) X, Move (Coordinates 2 1) O
+                            [ x 0 0, x 0 1, o 0 2
+                            , o 1 0, o 1 1, x 1 2
+                            , x 2 0, o 2 1
                             ]
                     in
                         assertEqual Tied
@@ -76,8 +89,8 @@ all =
                 , test "Returns a game state with status Won X if player X won the game" <|
                     let
                         moves =
-                            [ Move (Coordinates 0 0) X, Move (Coordinates 0 1) X
-                            , Move (Coordinates 1 0) O, Move (Coordinates 1 1) O
+                            [ x 0 0, x 0 1
+                            , o 1 0, o 1 1
                             ]
                     in
                         assertEqual (Won X)
@@ -88,8 +101,8 @@ all =
                 , test "Returns a game state with status Won O if player O won the game" <|
                     let
                         moves =
-                            [ Move (Coordinates 0 0) O, Move (Coordinates 0 1) O
-                            , Move (Coordinates 1 0) X, Move (Coordinates 1 1) X
+                            [ o 0 0, o 0 1
+                            , x 1 0, x 1 1
                             ]
                     in
                         assertEqual (Won O)
@@ -111,8 +124,8 @@ all =
             [ test "Returns true if a player has won" <|
                 let
                     moves =
-                        [ Move (Coordinates 0 0) X, Move (Coordinates 0 1) X, Move (Coordinates 0 2) X
-                        , Move (Coordinates 1 0) O, Move (Coordinates 1 1) O
+                        [ x 0 0, x 0 1, x 0 2
+                        , o 1 0, o 1 1
                         ]
                     gameState = GameState 3 O moves InProgress
                 in
@@ -121,9 +134,9 @@ all =
             , test "Returns true if the game ended in a tie" <|
                 let
                     moves =
-                        [ Move (Coordinates 0 0) X, Move (Coordinates 0 1) X, Move (Coordinates 0 2) O
-                        , Move (Coordinates 1 0) O, Move (Coordinates 1 1) O, Move (Coordinates 1 2) X
-                        , Move (Coordinates 2 0) X, Move (Coordinates 2 1) O, Move (Coordinates 2 2) X
+                        [ x 0 0, x 0 1, o 0 2
+                        , o 1 0, o 1 1, x 1 2
+                        , x 2 0, o 2 1, x 2 2
                         ]
                 in
                     assertEqual True (isGameOver (GameState 3 O moves InProgress))
@@ -134,8 +147,8 @@ all =
             , test "Returns false if the game has not been won or tied" <|
                 let
                     moves =
-                        [ Move (Coordinates 0 0) X, Move (Coordinates 0 1) O, Move (Coordinates 0 2) X
-                        , Move (Coordinates 1 0) O, Move (Coordinates 1 1) X
+                        [ x 0 0, o 0 1, x 0 2
+                        , o 1 0, x 1 1
                         ]
                     gameState = GameState 3 O moves InProgress
                 in
@@ -149,9 +162,9 @@ all =
             , test "Returns nothing if the game is tied" <|
                 let
                     moves =
-                        [ Move (Coordinates 0 0) X, Move (Coordinates 0 1) X, Move (Coordinates 0 2) O
-                        , Move (Coordinates 1 0) O, Move (Coordinates 1 1) O, Move (Coordinates 1 2) X
-                        , Move (Coordinates 2 0) X, Move (Coordinates 2 1) O, Move (Coordinates 2 2) X
+                        [ x 0 0, x 0 1, o 0 2
+                        , o 1 0, o 1 1, x 1 2
+                        , x 2 0, o 2 1, x 2 2
                         ]
                 in
                     assertEqual Nothing (winningPlayer (GameState 3 X moves InProgress))
@@ -159,8 +172,8 @@ all =
             , test "Returns player X if they won the game" <|
                 let
                     moves =
-                        [ Move (Coordinates 0 0) X, Move (Coordinates 0 1) X, Move (Coordinates 0 2) X
-                        , Move (Coordinates 1 0) O, Move (Coordinates 1 1) O
+                        [ x 0 0, x 0 1, x 0 2
+                        , o 1 0, o 1 1
                         ]
                 in
                     assertEqual (Just X) (winningPlayer (GameState 3 O moves InProgress))
@@ -168,8 +181,8 @@ all =
             , test "Returns player O if they won the game" <|
                 let
                     moves =
-                        [ Move (Coordinates 0 0) O, Move (Coordinates 0 1) O, Move (Coordinates 0 2) O
-                        , Move (Coordinates 1 0) X, Move (Coordinates 1 1) X
+                        [ o 0 0, o 0 1, o 0 2
+                        , x 1 0, x 1 1
                         ]
                 in
                 assertEqual (Just O) (winningPlayer (GameState 3 X moves InProgress))
