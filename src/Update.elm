@@ -1,16 +1,22 @@
 module Update where
 
-import Model exposing (GameState, Coordinates, Move, other, playerWhoMovedAt)
+import Model exposing (GameState, Coordinates, Move, Player(X, O))
 
 makeMove : Coordinates -> GameState -> GameState
 makeMove coordinates gameState =
-  case playerWhoMovedAt coordinates gameState of
+  case Model.playerWhoMovedAt coordinates gameState of
     Just _ -> gameState
     Nothing -> {
         gameState |
-          currentPlayer = other gameState.currentPlayer,
+          currentPlayer = otherPlayer gameState.currentPlayer,
           movesSoFar = Move coordinates gameState.currentPlayer :: gameState.movesSoFar
       }
+
+otherPlayer : Player -> Player
+otherPlayer player =
+  case player of
+    X -> O
+    O -> X
 
 isGameOver : GameState -> Bool
 isGameOver gameState =

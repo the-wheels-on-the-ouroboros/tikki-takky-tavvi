@@ -24,12 +24,6 @@ type alias GameState = {
 initialGameState : GameState
 initialGameState = GameState 3 X [] InProgress
 
-other : Player -> Player
-other player =
-  case player of
-    X -> O
-    O -> X
-
 boardCoordinates : GameState -> List Coordinates
 boardCoordinates gameState =
   let

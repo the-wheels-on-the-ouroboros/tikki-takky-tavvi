@@ -9,7 +9,7 @@ import Model exposing (
     Player (X, O),
     Status (InProgress, Tied, Won)
   )
-import Update exposing (makeMove, isGameOver)
+import Update exposing (makeMove, isGameOver, otherPlayer)
 
 all : Test
 all =
@@ -33,19 +33,27 @@ all =
 
                   test "Returns a game state in which the other player is now the current player" <|
                     assertEqual
-                      (Model.other player)
+                      (otherPlayer player)
                       (makeMove targetCoordinates gameState).currentPlayer
                 ],
             suite "When a move has already been made at target coordinates" <|
               let
                 preexistingMove = Move targetCoordinates player
-                gameState = GameState 3 (Model.other player) [ preexistingMove ] InProgress
+                gameState = GameState 3 (otherPlayer player) [ preexistingMove ] InProgress
               in
                 [
                   test "Returns an unchanged game state" <|
                     assertEqual gameState <| makeMove targetCoordinates gameState
                 ]
           ],
+      suite "Getting the other player" <|
+
+        [ test "Given X, the other player is O" <|
+            assertEqual X <| otherPlayer O
+
+        , test "Given O, the other player is X" <|
+            assertEqual O <| otherPlayer X
+        ],
       suite "Checking if the game is over" <|
 
         [ test "Returns true if a player has won" <|

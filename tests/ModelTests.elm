@@ -9,20 +9,13 @@ import Model exposing (
     Player (X, O),
     Status (InProgress, Tied, Won),
     boardCoordinates,
-    playerWhoMovedAt,
-    other
+    playerWhoMovedAt
   )
 
 all : Test
 all =
   suite "Using the game model" <|
     [
-      suite "Getting the other player" <|
-        [
-          test "Given X, the other player is O" <| assertEqual X <| other O,
-
-          test "Given O, the other player is X" <| assertEqual O <| other X
-        ],
       suite "Getting the board coordinates" <|
         [
           test "A 3x3 board has 9 coordinates" <|
