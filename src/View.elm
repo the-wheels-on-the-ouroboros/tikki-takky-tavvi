@@ -9,37 +9,38 @@ import Styles exposing (
   )
 import Graphics.Collage exposing (collage, square, filled, toForm, move)
 import Graphics.Element exposing (centered, container, middle, down, right, flow)
+import Graphics.Input exposing (clickable)
 import Html
 import Text
 
 import Model exposing (Player (X, O), GameState, Coordinates, Move)
 
 render : Signal.Address Coordinates -> GameState -> Html.Html
-render coordinates gameState =
+render moveAddress gameState =
   let
     containerWidth = (gameState.boardSize + 1) * (boardSpaceMargin + boardSpaceSize)
+    gameBoard = drawGameBoard moveAddress gameState
   in
-    Html.fromElement <| container containerWidth containerWidth middle <| drawGameBoard gameState
+    Html.fromElement <| container containerWidth containerWidth middle gameBoard
 
-drawGameBoard : GameState -> Graphics.Element.Element
-drawGameBoard gameState =
-  flow down <| List.map (flow right) <| createBoardSpaces gameState
+drawGameBoard : Signal.Address Coordinates -> GameState -> Graphics.Element.Element
+drawGameBoard moveAddress gameState =
+  flow down <| List.map (flow right) <| createBoardSpaces moveAddress gameState
 
-createBoardSpaces : GameState -> List (List Graphics.Element.Element)
-createBoardSpaces gameState =
+createBoardSpaces : Signal.Address Coordinates -> GameState -> List (List Graphics.Element.Element)
+createBoardSpaces moveAddress gameState =
   let
     boardCoordinates = Model.boardCoordinates gameState
-    coordinatesForRow = \coordinates row ->
-      List.filter (\c -> c.row == row) coordinates
+    coordinatesForRow = \coordinates row -> List.filter (\c -> c.row == row) coordinates
     partitionedCoordinatesByRow =
       List.map (coordinatesForRow boardCoordinates) [0..(gameState.boardSize - 1)]
   in
     List.map
-      (List.map (\coordinates -> createBoardSpace coordinates gameState))
+      (List.map (\coordinates -> createBoardSpace coordinates moveAddress gameState))
       partitionedCoordinatesByRow
 
-createBoardSpace : Coordinates -> GameState -> Graphics.Element.Element
-createBoardSpace coordinates gameState =
+createBoardSpace : Coordinates -> Signal.Address Coordinates -> GameState -> Graphics.Element.Element
+createBoardSpace coordinates moveAddress gameState =
   let
     paddedSize = boardSpaceSize + boardSpaceMargin
     padding = filled boardBackgroundColor <| square paddedSize
@@ -47,6 +48,7 @@ createBoardSpace coordinates gameState =
     playerMark = toForm <| createPlayerMark <| Model.playerWhoMovedAt coordinates gameState
   in
     collage paddedSize paddedSize [ padding, background, playerMark ]
+      |> clickable (Signal.message moveAddress coordinates)
 
 createPlayerMark : Maybe Player -> Graphics.Element.Element
 createPlayerMark player =
