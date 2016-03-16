@@ -1,6 +1,11 @@
 module Update where
 
-import Model exposing (GameState, Coordinates, Move, Player(X, O))
+import Model exposing (
+    GameState,
+    Coordinates,
+    Move,
+    Player(X, O)
+  )
 
 makeMove : Coordinates -> GameState -> GameState
 makeMove coordinates gameState =
@@ -17,6 +22,19 @@ otherPlayer player =
   case player of
     X -> O
     O -> X
+
+winningPlayer : GameState -> Maybe Player
+winningPlayer gameState =
+  let
+    winningLines = List.filter (isWinningLine gameState.boardSize) (getLines gameState)
+  in
+    case winningLines of
+      line::_ ->
+        case line of
+          move::_ -> Just move.player
+          [] -> Nothing
+      [] ->
+        Nothing
 
 isGameOver : GameState -> Bool
 isGameOver gameState =

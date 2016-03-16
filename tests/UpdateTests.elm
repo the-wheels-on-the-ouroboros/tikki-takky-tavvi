@@ -9,7 +9,12 @@ import Model exposing (
     Player (X, O),
     Status (InProgress, Tied, Won)
   )
-import Update exposing (makeMove, isGameOver, otherPlayer)
+import Update exposing (
+    makeMove,
+    isGameOver,
+    otherPlayer,
+    winningPlayer
+  )
 
 all : Test
 all =
@@ -89,5 +94,38 @@ all =
             gameState = GameState 3 O moves InProgress
           in
             assertEqual False <| isGameOver gameState
+        ],
+      suite "Getting the winning player"
+
+        [ test "Returns nothing if the game is not over" <|
+          assertEqual Nothing (winningPlayer (GameState 3 X [] InProgress))
+
+        , test "Returns nothing if the game is tied" <|
+          let
+            moves =
+              [ Move (Coordinates 0 0) X, Move (Coordinates 0 1) X, Move (Coordinates 0 2) O
+              , Move (Coordinates 1 0) O, Move (Coordinates 1 1) O, Move (Coordinates 1 2) X
+              , Move (Coordinates 2 0) X, Move (Coordinates 2 1) O, Move (Coordinates 2 2) X
+              ]
+          in
+            assertEqual Nothing (winningPlayer (GameState 3 X moves InProgress))
+
+        , test "Returns player X if they won the game" <|
+          let
+            moves = [
+              Move (Coordinates 0 0) X, Move (Coordinates 0 1) X, Move (Coordinates 0 2) X,
+              Move (Coordinates 1 0) O, Move (Coordinates 1 1) O
+            ]
+          in
+            assertEqual (Just X) (winningPlayer (GameState 3 O moves InProgress))
+
+        , test "Returns player O if they won the game" <|
+          let
+            moves = [
+              Move (Coordinates 0 0) O, Move (Coordinates 0 1) O, Move (Coordinates 0 2) O,
+              Move (Coordinates 1 0) X, Move (Coordinates 1 1) X
+            ]
+          in
+            assertEqual (Just O) (winningPlayer (GameState 3 X moves InProgress))
         ]
     ]
