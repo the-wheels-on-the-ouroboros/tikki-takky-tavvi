@@ -10,18 +10,15 @@ import Model exposing (
 
 makeMove : Coordinates -> GameState -> GameState
 makeMove coordinates gameState =
-  let
-    newGameState =
-      { gameState |
-        currentPlayer = otherPlayer gameState.currentPlayer,
-        movesSoFar = Move coordinates gameState.currentPlayer :: gameState.movesSoFar
-      }
-  in
-    case Model.playerWhoMovedAt coordinates gameState of
-      Just _ ->
-        gameState
-      Nothing ->
-        updateGameStatus newGameState
+  case (gameState.status, Model.playerWhoMovedAt coordinates gameState) of
+    (InProgress, Nothing) ->
+      updateGameStatus
+        { gameState |
+          currentPlayer = otherPlayer gameState.currentPlayer,
+          movesSoFar = Move coordinates gameState.currentPlayer :: gameState.movesSoFar
+        }
+    _ ->
+      gameState
 
 updateGameStatus : GameState -> GameState
 updateGameStatus gameState =
@@ -45,12 +42,9 @@ winningPlayer gameState =
     winningLines = List.filter (isWinningLine gameState.boardSize) (getLines gameState)
   in
     case winningLines of
-      line::_ ->
-        case line of
-          move::_ -> Just move.player
-          [] -> Nothing
-      [] ->
-        Nothing
+      (move::_)::_ -> Just move.player
+      []::_ -> Nothing
+      [] -> Nothing
 
 isGameOver : GameState -> Bool
 isGameOver gameState =
