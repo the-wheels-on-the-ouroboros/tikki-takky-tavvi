@@ -1,61 +1,68 @@
 module View where
 
-import Styles exposing (
-    boardSpaceSize,
-    boardSpaceMargin,
-    boardSpaceColor,
-    boardSpaceMarkStyle,
-    boardBackgroundColor
-  )
-import Graphics.Collage exposing (collage, square, filled, toForm, move)
-import Graphics.Element exposing (centered, container, middle, down, right, flow)
-import Graphics.Input exposing (clickable)
-import Html
+import Graphics.Collage as Collage
+import Graphics.Element as Element exposing (Element)
+import Graphics.Input as Input
+import Html exposing (Html)
 import Text
 
-import Model exposing (Player (X, O), GameState, Coordinates, Move)
+import Model exposing (
+        Coordinates,
+        GameState,
+        Move,
+        Player (X, O)
+    )
+import Styles
 
-render : Signal.Address Coordinates -> GameState -> Html.Html
+
+render : Signal.Address Coordinates -> GameState -> Html
 render moveAddress gameState =
-  let
-    containerWidth = (gameState.boardSize + 1) * (boardSpaceMargin + boardSpaceSize)
-    gameBoard = drawGameBoard moveAddress gameState
-  in
-    Html.fromElement <| container containerWidth containerWidth middle gameBoard
+    let
+        containerWidth = (gameState.boardSize + 1) * (Styles.spaceMargin + Styles.spaceSize)
+        gameBoard = drawGameBoard moveAddress gameState
+    in
+        Html.fromElement (Element.container containerWidth containerWidth Element.middle gameBoard)
 
-drawGameBoard : Signal.Address Coordinates -> GameState -> Graphics.Element.Element
+
+drawGameBoard : Signal.Address Coordinates -> GameState -> Element
 drawGameBoard moveAddress gameState =
-  flow down <| List.map (flow right) <| createBoardSpaces moveAddress gameState
+    Element.flow Element.down
+        <| List.map (Element.flow Element.right)
+        <| createBoardSpaces moveAddress gameState
 
-createBoardSpaces : Signal.Address Coordinates -> GameState -> List (List Graphics.Element.Element)
+
+createBoardSpaces : Signal.Address Coordinates -> GameState -> List (List Element)
 createBoardSpaces moveAddress gameState =
-  let
-    boardCoordinates = Model.boardCoordinates gameState
-    coordinatesForRow = \coordinates row -> List.filter (\c -> c.row == row) coordinates
-    partitionedCoordinatesByRow =
-      List.map (coordinatesForRow boardCoordinates) [0..(gameState.boardSize - 1)]
-  in
-    List.map
-      (List.map (\coordinates -> createBoardSpace coordinates moveAddress gameState))
-      partitionedCoordinatesByRow
+    let
+        boardCoordinates = Model.boardCoordinates gameState
+        coordinatesForRow = \coordinates row -> List.filter (\c -> c.row == row) coordinates
+    in
+        List.map
+            (List.map (\coordinates -> createBoardSpace coordinates moveAddress gameState))
+            (List.map (coordinatesForRow boardCoordinates) [0..(gameState.boardSize - 1)])
 
-createBoardSpace : Coordinates -> Signal.Address Coordinates -> GameState -> Graphics.Element.Element
+
+createBoardSpace : Coordinates -> Signal.Address Coordinates -> GameState -> Element
 createBoardSpace coordinates moveAddress gameState =
-  let
-    paddedSize = boardSpaceSize + boardSpaceMargin
-    padding = filled boardBackgroundColor <| square paddedSize
-    background = filled boardSpaceColor <| square boardSpaceSize
-    playerMark = toForm <| createPlayerMark <| Model.playerWhoMovedAt coordinates gameState
-  in
-    collage paddedSize paddedSize [ padding, background, playerMark ]
-      |> clickable (Signal.message moveAddress coordinates)
+    let
+        paddedSize = Styles.spaceSize + Styles.spaceMargin
+        padding = Collage.filled Styles.boardColor (Collage.square (toFloat paddedSize))
+        background = Collage.filled Styles.spaceColor (Collage.square (toFloat Styles.spaceSize))
+        playerMark = Collage.toForm
+            <| createPlayerMark
+            <| Model.playerWhoMovedAt coordinates gameState
+    in
+        Input.clickable
+            (Signal.message moveAddress coordinates)
+            (Collage.collage paddedSize paddedSize [ padding, background, playerMark ])
 
-createPlayerMark : Maybe Player -> Graphics.Element.Element
+
+createPlayerMark : Maybe Player -> Element
 createPlayerMark player =
-  let
-    playerString = case player of
-      Just X -> "X"
-      Just O -> "O"
-      Nothing -> " "
-  in
-    centered <| Text.style boardSpaceMarkStyle <| Text.fromString playerString
+    let
+        playerString = case player of
+            Just X -> "X"
+            Just O -> "O"
+            Nothing -> " "
+    in
+        Element.centered (Text.style Styles.spaceMarkStyle (Text.fromString playerString))
