@@ -19,9 +19,11 @@ import Styles
 render : Signal.Address Coordinates -> GameState -> Html
 render moveAddress gameState =
     let
-        containerWidth = (gameState.boardSize + 1) * (Styles.spaceMargin + Styles.spaceSize)
+        containerWidth =
+            (gameState.boardSize + 1) * Styles.spaceMargin + gameState.boardSize * Styles.spaceSize
     in
         Html.fromElement
+            <| Element.color Styles.backgroundColor
             <| Element.container containerWidth containerWidth Element.middle
             <| drawGameBoard moveAddress gameState
 

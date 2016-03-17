@@ -3,6 +3,11 @@ module Styles where
 import Color exposing (Color)
 import Text
 
+
+backgroundColor : Color
+backgroundColor = green
+
+
 boardColor : Color
 boardColor = blue
 
