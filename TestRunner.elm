@@ -6,15 +6,18 @@ import ElmTest exposing (..)
 import Console exposing (IO, run)
 import Task
 
+import MinimaxTests
 import ModelTests
+import TestHelpersTests
 import UpdateTests
 
 tests : Test
 tests =
   suite "Tic Tac Toe tests"
-    [
-      ModelTests.all,
-      UpdateTests.all
+    [ MinimaxTests.all
+    , ModelTests.all
+    , TestHelpersTests.all
+    , UpdateTests.all
     ]
 
 console : IO ()

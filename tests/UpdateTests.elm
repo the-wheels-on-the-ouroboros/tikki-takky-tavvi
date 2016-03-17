@@ -9,24 +9,13 @@ import Model exposing (
         Player (X, O),
         Status (InProgress, Tied, Won)
     )
+import TestHelpers exposing (x, o)
 import Update exposing (
         isGameOver,
         makeMove,
         otherPlayer,
         winningPlayer
     )
-
-
-playerMove : Player -> Int -> Int -> Move
-playerMove player row col = Move (Coordinates row col) player
-
-
-x : Int -> Int -> Move
-x row col = playerMove X row col
-
-
-o : Int -> Int -> Move
-o row col = playerMove O row col
 
 
 all : Test
