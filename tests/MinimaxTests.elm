@@ -3,7 +3,7 @@ module MinimaxTests where
 import ElmTest exposing (..)
 
 import Minimax exposing (..)
-import Model exposing (GameState, Player(X, O), Status(InProgress, Tied, Won))
+import Model exposing (Coordinates, GameState, Player(X, O), Status(InProgress, Tied, Won))
 import TestHelpers as Helpers exposing (x, o)
 
 
@@ -11,7 +11,86 @@ all : Test
 all =
     suite "Applying the minimax algorithm"
 
-        [ suite "Creating subsequent game states"
+        [ suite "Getting the best next move"
+
+            [ test "Returns nothing when no moves are possible" <|
+                let
+                    moves =
+                        [ x 0 0, x 0 1, o 0 2
+                        , o 1 0, o 1 1, x 1 2
+                        , x 2 0, o 2 1, x 2 2
+                        ]
+                in
+                    assertEqual Nothing (bestMove (GameState 3 X moves Tied))
+
+            , test "Chooses a winning move" <|
+                let
+                    moves =
+                        [ x 0 0, x 0 1
+                        , o 1 0
+                        , o 2 0
+                        ]
+                in
+                    assertEqual (Just (Coordinates 0 2)) (bestMove (GameState 3 X moves InProgress))
+
+            , test "Chooses a move that blocks the opponent from winning" <|
+                let
+                    moves =
+                        [ x 0 0
+                        , o 1 0, o 1 1
+                        , x 2 0
+                        ]
+                in
+                    assertEqual (Just (Coordinates 1 2)) (bestMove (GameState 3 X moves InProgress))
+
+            , test "Chooses a move that creates a fork" <|
+                let
+                    moves =
+                        [ x 0 0
+                        , o 1 0
+                        , x 2 0, o 2 1
+                        ]
+                in
+                    assertEqual (Just (Coordinates 1 1)) (bestMove (GameState 3 X moves InProgress))
+
+            , test "Chooses a winning move over a blocking move" <|
+                let
+                    moves =
+                        [ x 0 0, x 0 1
+                        , o 1 0, o 1 1
+                        ]
+                in
+                    assertEqual (Just (Coordinates 0 2)) (bestMove (GameState 3 X moves InProgress))
+
+            , test "Chooses a winning move over a fork" <|
+                let
+                    moves =
+                        [ x 0 0, o 0 1, o 0 2
+                        , x 1 0
+                        ]
+                in
+                    assertEqual (Just (Coordinates 2 0)) (bestMove (GameState 3 X moves InProgress))
+
+            , test "Chooses a blocking move over a fork" <|
+                let
+                    moves =
+                        [ o 0 0, x 0 1, x 0 2
+                        , o 1 0
+                        ]
+                in
+                    assertEqual (Just (Coordinates 2 0)) (bestMove (GameState 3 X moves InProgress))
+            ]
+
+        , suite "Getting the maximum element from a list when translated into comparable values"
+
+            [ test "Returns nothing if given an empty list" <|
+                assertEqual Nothing (maximumBy identity [])
+
+            , test "Returns the element that has the max value when given function is applied" <|
+                assertEqual (Just 0) (maximumBy ((*) -1) [0, 1, 2, 3])
+            ]
+
+        , suite "Creating subsequent game states"
 
             [ test "Given an end game state, returns an empty list" <|
                 let

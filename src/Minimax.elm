@@ -4,6 +4,30 @@ import Model exposing (Coordinates, GameState, Status(InProgress, Tied, Won))
 import Update
 
 
+bestMove : GameState -> Maybe Coordinates
+bestMove gameState =
+    let
+        bestNextGameState = maximumBy (\state -> -1 * (score state)) (nextGameStates gameState)
+    in
+        case bestNextGameState of
+            Just nextState -> Maybe.map .coordinates (List.head nextState.movesSoFar)
+            Nothing -> Nothing
+
+
+maximumBy : (a -> comparable') -> List a -> Maybe a
+maximumBy translate list =
+    let
+        maxComparison =
+            \element currentMaxElement ->
+                if (translate element) < (translate currentMaxElement)
+                    then currentMaxElement
+                    else element
+    in
+        case list of
+            hd :: tl -> Just (List.foldl maxComparison hd tl)
+            [] -> Nothing
+
+
 score : GameState -> Int
 score gameState =
     let
