@@ -13,33 +13,39 @@ import View.Styles as Styles
 import View.Utilities as ViewUtil
 
 
-applyGameOverOverlay : GameState -> Element -> Element
-applyGameOverOverlay gameState gameBoard =
+applyBoardOverlay : GameState -> Element -> Element
+applyBoardOverlay gameState gameBoard =
     let
-        boardWidth = gameState.boardSize * (Styles.spaceSize + Styles.spaceMargin)
-        wonGameOverlay =
-            \player -> overlay boardWidth ((ViewUtil.playerToString (Just player)) ++ " won!")
-        tiedGameOverlay = overlay boardWidth "You tied"
+        boardOverlay = overlay (ViewUtil.calculateBoardWidth gameState)
     in
         case gameState.status of
             InProgress ->
                 gameBoard
             Tied ->
-                Element.flow Element.outward [ gameBoard, tiedGameOverlay ]
+                Element.flow Element.outward [ gameBoard, boardOverlay gameTiedMessage ]
             Won player ->
-                Element.flow Element.outward [ gameBoard, wonGameOverlay player ]
+                Element.flow Element.outward [ gameBoard , boardOverlay (gameWonMessage player) ]
+
+
+gameWonMessage : Player -> String
+gameWonMessage player = (ViewUtil.playerToString (Just player)) ++ " won!"
+
+
+gameTiedMessage : String
+gameTiedMessage = "You tied"
 
 
 overlay : Int -> String -> Element
 overlay elementSize message =
-    Collage.collage
-        elementSize
-        elementSize
-        [ Collage.filled Styles.overlayColor
-            <| Collage.square
-            <| toFloat elementSize
-        , Collage.toForm
-            <| Element.centered
-            <| Text.style Styles.overlayTextStyle
-            <| Text.fromString message
-        ]
+    let
+        background =
+            Collage.filled Styles.overlayColor
+                <| Collage.square
+                <| toFloat elementSize
+        text =
+            Collage.toForm
+                <| Element.centered
+                <| Text.style Styles.overlayTextStyle
+                <| Text.fromString message
+    in
+        Collage.collage elementSize elementSize [ background, text ]

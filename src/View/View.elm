@@ -21,8 +21,7 @@ import View.Utilities as ViewUtil
 render : Signal.Address Coordinates -> GameState -> Html
 render moveAddress gameState =
     let
-        containerWidth =
-            (gameState.boardSize + 1) * Styles.spaceMargin + gameState.boardSize * Styles.spaceSize
+        containerWidth = (ViewUtil.calculateBoardWidth gameState) + Styles.spaceMargin
     in
         Html.fromElement
             <| Element.color Styles.backgroundColor
@@ -32,7 +31,7 @@ render moveAddress gameState =
 
 drawGameBoard : Signal.Address Coordinates -> GameState -> Element
 drawGameBoard moveAddress gameState =
-    Overlay.applyGameOverOverlay gameState
+    Overlay.applyBoardOverlay gameState
         <| Element.flow Element.down
         <| List.map (Element.flow Element.right)
         <| createBoardSpaces moveAddress gameState
