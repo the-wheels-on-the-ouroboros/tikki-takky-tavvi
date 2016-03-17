@@ -1,8 +1,8 @@
 module UtilitiesTests where
 
-import ElmTest exposing (..)
+import ElmTest exposing (Test, assert, assertEqual, suite, test)
 
-import Utilities exposing (..)
+import Utilities exposing (areElementsEqual, count, maximumBy)
 
 
 all : Test

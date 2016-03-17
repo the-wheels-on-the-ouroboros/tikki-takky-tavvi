@@ -1,6 +1,6 @@
 module GameLogic.GameEndTests where
 
-import ElmTest exposing (..)
+import ElmTest exposing (Test, assertEqual, suite, test)
 
 import GameModel exposing (GameState, Move, Player (X, O), Status (InProgress, Tied, Won))
 import TestHelpers exposing (x, o)

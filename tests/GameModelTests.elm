@@ -1,6 +1,6 @@
 module GameModelTests where
 
-import ElmTest exposing (..)
+import ElmTest exposing (Test, assertEqual, suite, test)
 
 import GameModel exposing (
         Coordinates,

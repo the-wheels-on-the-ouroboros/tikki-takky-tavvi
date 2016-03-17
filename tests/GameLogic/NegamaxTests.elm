@@ -1,6 +1,6 @@
 module GameLogic.NegamaxTests where
 
-import ElmTest exposing (..)
+import ElmTest exposing (Test, assert, assertEqual, suite, test)
 
 import GameModel exposing (Coordinates, GameState, Player(X, O), Status(InProgress, Tied, Won))
 import TestHelpers exposing (x, o)

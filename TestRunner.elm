@@ -2,7 +2,7 @@ module Main where
 
 import Signal exposing (Signal)
 
-import ElmTest exposing (..)
+import ElmTest exposing (Test, consoleRunner, suite)
 import Console exposing (IO, run)
 import Task
 
