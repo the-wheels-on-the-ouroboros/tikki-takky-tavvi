@@ -110,7 +110,7 @@ all =
                         ]
                 in
                     assert
-                        <| Utilities.areUnorderedElementsEqual
+                        <| Utilities.areElementsEqual
                             potentialGameStates
                             (nextGameStates (GameState 3 X moves InProgress))
             ]

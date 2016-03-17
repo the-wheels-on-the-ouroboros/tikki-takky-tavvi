@@ -15,8 +15,8 @@ maximumBy translate list =
             [] -> Nothing
 
 
-areUnorderedElementsEqual : List a -> List a -> Bool
-areUnorderedElementsEqual list list' =
+areElementsEqual : List a -> List a -> Bool
+areElementsEqual list list' =
     (List.length list) == (List.length list')
         && List.all (\element -> (count element list) == (count element list')) list
 

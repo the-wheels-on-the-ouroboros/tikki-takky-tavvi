@@ -20,16 +20,16 @@ all =
         , suite "Comparing equality of list elements ignoring order"
 
             [ test "Lists are unequal if they are of different lengths" <|
-                assert (not (areUnorderedElementsEqual [1, 2, 3, 3] [1, 2, 3]))
+                assert (not (areElementsEqual [1, 2, 3, 3] [1, 2, 3]))
 
             , test "Lists are unequal if they have differing elements" <|
-                assert (not (areUnorderedElementsEqual [1, 2, 3, 3] [1, 2, 3, 4]))
+                assert (not (areElementsEqual [1, 2, 3, 3] [1, 2, 3, 4]))
 
             , test "Lists are unequal if they have differing numbers of the same elements" <|
-                assert (not (areUnorderedElementsEqual [1, 2, 3, 3] [1, 2, 2, 3]))
+                assert (not (areElementsEqual [1, 2, 3, 3] [1, 2, 2, 3]))
 
             , test "Lists are equal if they have the same elements and the same length" <|
-                assert (areUnorderedElementsEqual [0, 1, 2, 3] [3, 1, 0, 2])
+                assert (areElementsEqual [0, 1, 2, 3] [3, 1, 0, 2])
             ]
         , suite "Getting the maximum element from a list when translated into comparable values"
 
