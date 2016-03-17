@@ -10,7 +10,8 @@ import Model exposing (
         Coordinates,
         GameState,
         Move,
-        Player (X, O)
+        Player (X, O),
+        Status (InProgress, Tied, Won)
     )
 import Styles
 
@@ -19,16 +20,50 @@ render : Signal.Address Coordinates -> GameState -> Html
 render moveAddress gameState =
     let
         containerWidth = (gameState.boardSize + 1) * (Styles.spaceMargin + Styles.spaceSize)
-        gameBoard = drawGameBoard moveAddress gameState
     in
-        Html.fromElement (Element.container containerWidth containerWidth Element.middle gameBoard)
+        Html.fromElement
+            <| Element.container containerWidth containerWidth Element.middle
+            <| drawGameBoard moveAddress gameState
 
 
 drawGameBoard : Signal.Address Coordinates -> GameState -> Element
 drawGameBoard moveAddress gameState =
-    Element.flow Element.down
+    applyGameOverOverlay gameState
+        <| Element.flow Element.down
         <| List.map (Element.flow Element.right)
         <| createBoardSpaces moveAddress gameState
+
+
+applyGameOverOverlay : GameState -> Element -> Element
+applyGameOverOverlay gameState gameBoard =
+    let
+        boardWidth = gameState.boardSize * (Styles.spaceSize + Styles.spaceMargin)
+        wonGameOverlay =
+            \player -> overlay boardWidth ((playerToString (Just player)) ++ " won!")
+        tiedGameOverlay = overlay boardWidth "You tied"
+    in
+        case gameState.status of
+            InProgress ->
+                gameBoard
+            Tied ->
+                Element.flow Element.outward [ gameBoard, tiedGameOverlay ]
+            Won player ->
+                Element.flow Element.outward [ gameBoard, wonGameOverlay player ]
+
+
+overlay : Int -> String -> Element
+overlay elementSize message =
+    Collage.collage
+        elementSize
+        elementSize
+        [ Collage.filled Styles.overlayColor
+            <| Collage.square
+            <| toFloat elementSize
+        , Collage.toForm
+            <| Element.centered
+            <| Text.style Styles.overlayTextStyle
+            <| Text.fromString message
+        ]
 
 
 createBoardSpaces : Signal.Address Coordinates -> GameState -> List (List Element)
@@ -48,9 +83,10 @@ createBoardSpace coordinates moveAddress gameState =
         paddedSize = Styles.spaceSize + Styles.spaceMargin
         padding = Collage.filled Styles.boardColor (Collage.square (toFloat paddedSize))
         background = Collage.filled Styles.spaceColor (Collage.square (toFloat Styles.spaceSize))
-        playerMark = Collage.toForm
-            <| createPlayerMark
-            <| Model.playerWhoMovedAt coordinates gameState
+        playerMark =
+            Collage.toForm
+                <| createPlayerMark
+                <| Model.playerWhoMovedAt coordinates gameState
     in
         Input.clickable
             (Signal.message moveAddress coordinates)
@@ -59,10 +95,12 @@ createBoardSpace coordinates moveAddress gameState =
 
 createPlayerMark : Maybe Player -> Element
 createPlayerMark player =
-    let
-        playerString = case player of
-            Just X -> "X"
-            Just O -> "O"
-            Nothing -> " "
-    in
-        Element.centered (Text.style Styles.spaceMarkStyle (Text.fromString playerString))
+    Element.centered (Text.style Styles.spaceMarkStyle (Text.fromString (playerToString player)))
+
+
+playerToString : Maybe Player -> String
+playerToString player =
+    case player of
+        Just X -> "X"
+        Just O -> "O"
+        Nothing -> " "
