@@ -1,10 +1,30 @@
-module Styles where
+module View.Styles where
 
 import Color exposing (Color)
 import Text
 
+
+backgroundColor : Color
+backgroundColor = green
+
+
 boardColor : Color
 boardColor = blue
+
+
+overlayColor : Color
+overlayColor = transparentOrange
+
+
+overlayTextStyle : Text.Style
+overlayTextStyle =
+    { typeface = [ "Helvetica Neue", "Arial", "sans-serif" ]
+    , height = Just <| 50
+    , color = gray
+    , bold = True
+    , italic = False
+    , line = Nothing
+    }
 
 
 spaceColor : Color
@@ -44,3 +64,6 @@ green = Color.rgb 127 209 59
 
 orange : Color
 orange = Color.rgb 240 173 0
+
+transparentOrange : Color
+transparentOrange = Color.rgba 240 173 0 0.75
