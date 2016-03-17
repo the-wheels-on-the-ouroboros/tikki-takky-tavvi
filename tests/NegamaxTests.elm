@@ -1,8 +1,8 @@
-module MinimaxTests where
+module NegamaxTests where
 
 import ElmTest exposing (..)
 
-import Minimax exposing (..)
+import Negamax exposing (..)
 import Model exposing (Coordinates, GameState, Player(X, O), Status(InProgress, Tied, Won))
 import TestHelpers exposing (x, o)
 import Utilities

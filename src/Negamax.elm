@@ -1,4 +1,4 @@
-module Minimax where
+module Negamax where
 
 import Model exposing (Coordinates, GameState, Status(InProgress, Tied, Won))
 import Update
