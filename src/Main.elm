@@ -2,7 +2,7 @@ import StartApp.Simple exposing (start)
 
 import Model
 import Update
-import View
+import View.View as View
 
 
 main =

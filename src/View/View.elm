@@ -1,4 +1,4 @@
-module View where
+module View.View where
 
 import Graphics.Collage as Collage
 import Graphics.Element as Element exposing (Element)
@@ -13,7 +13,7 @@ import Model exposing (
         Player (X, O),
         Status (InProgress, Tied, Won)
     )
-import Styles
+import View.Styles as Styles
 
 
 render : Signal.Address Coordinates -> GameState -> Html

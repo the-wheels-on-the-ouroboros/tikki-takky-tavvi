@@ -1,4 +1,4 @@
-module Styles where
+module View.Styles where
 
 import Color exposing (Color)
 import Text
