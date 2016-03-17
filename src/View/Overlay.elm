@@ -4,11 +4,7 @@ import Graphics.Collage as Collage
 import Graphics.Element as Element exposing (Element)
 import Text
 
-import Model exposing (
-        GameState,
-        Player (X, O),
-        Status (InProgress, Tied, Won)
-    )
+import Model exposing (GameState, Player (X, O), Status (InProgress, Tied, Won))
 import View.Styles as Styles
 import View.Utilities as ViewUtil
 
