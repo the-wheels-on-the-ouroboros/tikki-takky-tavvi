@@ -47,6 +47,6 @@ nextGameStates gameState =
 availableCoordinates : GameState -> List Coordinates
 availableCoordinates gameState =
     let
-        isMoveTaken = \coordinates -> (GameModel.playerWhoMovedAt coordinates gameState) == Nothing
+        isMoveTaken = \coordinates -> (GameModel.playerAt coordinates gameState) == Nothing
     in
         List.filter isMoveTaken (GameModel.boardCoordinates gameState)

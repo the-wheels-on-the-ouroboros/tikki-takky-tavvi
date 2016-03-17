@@ -6,7 +6,7 @@ import GameModel exposing (Coordinates, GameState, Move, Player(X, O), Status(In
 
 makeMove : Coordinates -> GameState -> GameState
 makeMove coordinates gameState =
-    case (gameState.status, GameModel.playerWhoMovedAt coordinates gameState) of
+    case (gameState.status, GameModel.playerAt coordinates gameState) of
         (InProgress, Nothing) ->
             updateGameStatus
                 { gameState |

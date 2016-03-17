@@ -39,7 +39,7 @@ createBoardSpace coordinates moveAddress gameState =
         playerMark =
             Collage.toForm
                 <| createPlayerMark
-                <| GameModel.playerWhoMovedAt coordinates gameState
+                <| GameModel.playerAt coordinates gameState
     in
         Input.clickable
             (Signal.message moveAddress coordinates)

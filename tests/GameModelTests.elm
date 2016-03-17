@@ -9,7 +9,7 @@ import GameModel exposing (
         Player (X, O),
         Status (InProgress, Tied, Won),
         boardCoordinates,
-        playerWhoMovedAt
+        playerAt
     )
 
 all : Test
@@ -35,7 +35,7 @@ all =
 
             [ test "Returns Nothing if the is no move at the given coordinates" <|
                 assertEqual Nothing
-                    <| playerWhoMovedAt (Coordinates 0 0)
+                    <| playerAt (Coordinates 0 0)
                     <| GameState 3 X [] InProgress
 
             , test "Returns the player who moved at the given coordinates" <|
@@ -43,7 +43,7 @@ all =
                     gameState = GameState 3 X [ Move (Coordinates 0 0) X ] InProgress
                 in
                     assertEqual (Just X)
-                        <| playerWhoMovedAt (Coordinates 0 0)
+                        <| playerAt (Coordinates 0 0)
                         <| GameState 3 X [ Move (Coordinates 0 0) X ] InProgress
             ]
         ]
