@@ -7,16 +7,18 @@ import Console exposing (IO, run)
 import Task
 
 import ModelTests
-import NegamaxTests
+import GameLogic.GameEndTests
+import GameLogic.NegamaxTests
+import GameLogic.UpdateStateTests
 import UtilitiesTests
-import UpdateTests
 
 tests : Test
 tests =
   suite "Tic Tac Toe tests"
-    [ ModelTests.all
-    , NegamaxTests.all
-    , UpdateTests.all
+    [ GameLogic.GameEndTests.all
+    , GameLogic.NegamaxTests.all
+    , GameLogic.UpdateStateTests.all
+    , ModelTests.all
     , UtilitiesTests.all
     ]
 

@@ -1,7 +1,7 @@
-module Negamax where
+module GameLogic.Negamax where
 
 import Model exposing (Coordinates, GameState, Status(InProgress, Tied, Won))
-import Update
+import GameLogic.UpdateState as Update
 import Utilities
 
 
