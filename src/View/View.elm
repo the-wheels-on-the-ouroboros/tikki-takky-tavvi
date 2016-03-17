@@ -3,7 +3,7 @@ module View.View where
 import Graphics.Element as Element exposing (Element)
 import Html exposing (Html)
 
-import Model exposing (Coordinates, GameState)
+import GameModel exposing (Coordinates, GameState)
 import View.GameBoard as GameBoard
 import View.Styles as Styles
 import View.Utilities as ViewUtil

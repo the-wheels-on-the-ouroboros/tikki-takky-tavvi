@@ -1,4 +1,4 @@
-module Model where
+module GameModel where
 
 
 type Player = X | O

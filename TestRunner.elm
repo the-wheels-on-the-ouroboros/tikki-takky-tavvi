@@ -6,10 +6,10 @@ import ElmTest exposing (..)
 import Console exposing (IO, run)
 import Task
 
-import ModelTests
 import GameLogic.GameEndTests
 import GameLogic.NegamaxTests
 import GameLogic.UpdateStateTests
+import GameModelTests
 import UtilitiesTests
 
 tests : Test
@@ -18,7 +18,7 @@ tests =
     [ GameLogic.GameEndTests.all
     , GameLogic.NegamaxTests.all
     , GameLogic.UpdateStateTests.all
-    , ModelTests.all
+    , GameModelTests.all
     , UtilitiesTests.all
     ]
 

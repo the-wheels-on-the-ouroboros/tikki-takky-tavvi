@@ -1,6 +1,6 @@
 module GameLogic.GameEnd where
 
-import Model exposing (Coordinates, GameState, Move, Player(X, O))
+import GameModel exposing (Coordinates, GameState, Move, Player(X, O))
 
 
 winningPlayer : GameState -> Maybe Player

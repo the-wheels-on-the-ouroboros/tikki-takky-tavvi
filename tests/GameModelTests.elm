@@ -1,8 +1,8 @@
-module ModelTests where
+module GameModelTests where
 
 import ElmTest exposing (..)
 
-import Model exposing (
+import GameModel exposing (
         Coordinates,
         GameState,
         Move,

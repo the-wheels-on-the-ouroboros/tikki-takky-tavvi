@@ -1,6 +1,6 @@
 module GameLogic.Negamax where
 
-import Model exposing (Coordinates, GameState, Status(InProgress, Tied, Won))
+import GameModel exposing (Coordinates, GameState, Status(InProgress, Tied, Won))
 import GameLogic.UpdateState as Update
 import Utilities
 
@@ -47,6 +47,6 @@ nextGameStates gameState =
 availableCoordinates : GameState -> List Coordinates
 availableCoordinates gameState =
     let
-        isMoveTaken = \coordinates -> (Model.playerWhoMovedAt coordinates gameState) == Nothing
+        isMoveTaken = \coordinates -> (GameModel.playerWhoMovedAt coordinates gameState) == Nothing
     in
-        List.filter isMoveTaken (Model.boardCoordinates gameState)
+        List.filter isMoveTaken (GameModel.boardCoordinates gameState)

@@ -1,12 +1,12 @@
 module GameLogic.UpdateState where
 
 import GameLogic.GameEnd as GameEnd
-import Model exposing (Coordinates, GameState, Move, Player(X, O), Status(InProgress, Tied, Won))
+import GameModel exposing (Coordinates, GameState, Move, Player(X, O), Status(InProgress, Tied, Won))
 
 
 makeMove : Coordinates -> GameState -> GameState
 makeMove coordinates gameState =
-    case (gameState.status, Model.playerWhoMovedAt coordinates gameState) of
+    case (gameState.status, GameModel.playerWhoMovedAt coordinates gameState) of
         (InProgress, Nothing) ->
             updateGameStatus
                 { gameState |

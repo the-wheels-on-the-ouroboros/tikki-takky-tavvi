@@ -2,7 +2,7 @@ module GameLogic.NegamaxTests where
 
 import ElmTest exposing (..)
 
-import Model exposing (Coordinates, GameState, Player(X, O), Status(InProgress, Tied, Won))
+import GameModel exposing (Coordinates, GameState, Player(X, O), Status(InProgress, Tied, Won))
 import TestHelpers exposing (x, o)
 import Utilities
 

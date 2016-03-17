@@ -5,13 +5,7 @@ import Graphics.Element as Element exposing (Element)
 import Graphics.Input as Input
 import Text
 
-import Model exposing (
-        Coordinates,
-        GameState,
-        Move,
-        Player (X, O),
-        Status (InProgress, Tied, Won)
-    )
+import GameModel exposing (Coordinates, GameState, Move, Player (X, O), Status (InProgress, Tied, Won))
 import View.Overlay as Overlay
 import View.Styles as Styles
 import View.Utilities as ViewUtil
@@ -28,7 +22,7 @@ create moveAddress gameState =
 createBoardSpaces : Signal.Address Coordinates -> GameState -> List (List Element)
 createBoardSpaces moveAddress gameState =
     let
-        boardCoordinates = Model.boardCoordinates gameState
+        boardCoordinates = GameModel.boardCoordinates gameState
         coordinatesForRow = \coordinates row -> List.filter (\c -> c.row == row) coordinates
     in
         List.map
@@ -45,7 +39,7 @@ createBoardSpace coordinates moveAddress gameState =
         playerMark =
             Collage.toForm
                 <| createPlayerMark
-                <| Model.playerWhoMovedAt coordinates gameState
+                <| GameModel.playerWhoMovedAt coordinates gameState
     in
         Input.clickable
             (Signal.message moveAddress coordinates)
