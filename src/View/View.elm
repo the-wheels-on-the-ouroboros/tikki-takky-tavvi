@@ -13,7 +13,9 @@ import Model exposing (
         Player (X, O),
         Status (InProgress, Tied, Won)
     )
+import View.Overlay as Overlay
 import View.Styles as Styles
+import View.Utilities as ViewUtil
 
 
 render : Signal.Address Coordinates -> GameState -> Html
@@ -30,42 +32,10 @@ render moveAddress gameState =
 
 drawGameBoard : Signal.Address Coordinates -> GameState -> Element
 drawGameBoard moveAddress gameState =
-    applyGameOverOverlay gameState
+    Overlay.applyGameOverOverlay gameState
         <| Element.flow Element.down
         <| List.map (Element.flow Element.right)
         <| createBoardSpaces moveAddress gameState
-
-
-applyGameOverOverlay : GameState -> Element -> Element
-applyGameOverOverlay gameState gameBoard =
-    let
-        boardWidth = gameState.boardSize * (Styles.spaceSize + Styles.spaceMargin)
-        wonGameOverlay =
-            \player -> overlay boardWidth ((playerToString (Just player)) ++ " won!")
-        tiedGameOverlay = overlay boardWidth "You tied"
-    in
-        case gameState.status of
-            InProgress ->
-                gameBoard
-            Tied ->
-                Element.flow Element.outward [ gameBoard, tiedGameOverlay ]
-            Won player ->
-                Element.flow Element.outward [ gameBoard, wonGameOverlay player ]
-
-
-overlay : Int -> String -> Element
-overlay elementSize message =
-    Collage.collage
-        elementSize
-        elementSize
-        [ Collage.filled Styles.overlayColor
-            <| Collage.square
-            <| toFloat elementSize
-        , Collage.toForm
-            <| Element.centered
-            <| Text.style Styles.overlayTextStyle
-            <| Text.fromString message
-        ]
 
 
 createBoardSpaces : Signal.Address Coordinates -> GameState -> List (List Element)
@@ -97,12 +67,7 @@ createBoardSpace coordinates moveAddress gameState =
 
 createPlayerMark : Maybe Player -> Element
 createPlayerMark player =
-    Element.centered (Text.style Styles.spaceMarkStyle (Text.fromString (playerToString player)))
-
-
-playerToString : Maybe Player -> String
-playerToString player =
-    case player of
-        Just X -> "X"
-        Just O -> "O"
-        Nothing -> " "
+    Element.centered
+        <| Text.style Styles.spaceMarkStyle
+        <| Text.fromString
+        <| ViewUtil.playerToString player
