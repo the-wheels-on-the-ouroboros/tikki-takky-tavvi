@@ -4,7 +4,8 @@ import ElmTest exposing (..)
 
 import Minimax exposing (..)
 import Model exposing (Coordinates, GameState, Player(X, O), Status(InProgress, Tied, Won))
-import TestHelpers as Helpers exposing (x, o)
+import TestHelpers exposing (x, o)
+import Utilities
 
 
 all : Test
@@ -81,15 +82,6 @@ all =
                     assertEqual (Just (Coordinates 2 0)) (bestMove (GameState 3 X moves InProgress))
             ]
 
-        , suite "Getting the maximum element from a list when translated into comparable values"
-
-            [ test "Returns nothing if given an empty list" <|
-                assertEqual Nothing (maximumBy identity [])
-
-            , test "Returns the element that has the max value when given function is applied" <|
-                assertEqual (Just 0) (maximumBy ((*) -1) [0, 1, 2, 3])
-            ]
-
         , suite "Creating subsequent game states"
 
             [ test "Given an end game state, returns an empty list" <|
@@ -118,7 +110,7 @@ all =
                         ]
                 in
                     assert
-                        <| Helpers.areUnorderedElementsEqual
+                        <| Utilities.areUnorderedElementsEqual
                             potentialGameStates
                             (nextGameStates (GameState 3 X moves InProgress))
             ]

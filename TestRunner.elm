@@ -8,7 +8,7 @@ import Task
 
 import MinimaxTests
 import ModelTests
-import TestHelpersTests
+import UtilitiesTests
 import UpdateTests
 
 tests : Test
@@ -16,8 +16,8 @@ tests =
   suite "Tic Tac Toe tests"
     [ MinimaxTests.all
     , ModelTests.all
-    , TestHelpersTests.all
     , UpdateTests.all
+    , UtilitiesTests.all
     ]
 
 console : IO ()
