@@ -1,6 +1,6 @@
 module View.Utilities where
 
-import Model exposing (GameState, Player (X, O))
+import GameModel exposing (GameState, Player (X, O))
 import View.Styles as Styles
 
 

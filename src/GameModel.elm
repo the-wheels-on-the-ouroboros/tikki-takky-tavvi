@@ -1,4 +1,4 @@
-module Model where
+module GameModel where
 
 
 type Player = X | O
@@ -40,8 +40,8 @@ boardCoordinates gameState =
         List.concatMap (\row -> List.map (\col -> Coordinates row col) indices) indices
 
 
-playerWhoMovedAt : Coordinates -> GameState -> Maybe Player
-playerWhoMovedAt coordinates gameState =
+playerAt : Coordinates -> GameState -> Maybe Player
+playerAt coordinates gameState =
     case List.filter (\move -> move.coordinates == coordinates) gameState.movesSoFar of
         move::_ -> Just move.player
         _ -> Nothing

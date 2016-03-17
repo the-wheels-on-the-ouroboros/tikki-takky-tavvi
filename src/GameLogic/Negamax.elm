@@ -1,31 +1,19 @@
-module Minimax where
+module GameLogic.Negamax where
 
-import Model exposing (Coordinates, GameState, Status(InProgress, Tied, Won))
-import Update
+import GameModel exposing (Coordinates, GameState, Status(InProgress, Tied, Won))
+import GameLogic.UpdateState as Update
+import Utilities
 
 
 bestMove : GameState -> Maybe Coordinates
 bestMove gameState =
     let
-        bestNextGameState = maximumBy (\state -> -1 * (score state)) (nextGameStates gameState)
+        bestNextGameState =
+            Utilities.maximumBy (\state -> -1 * (score state)) (nextGameStates gameState)
     in
         case bestNextGameState of
             Just nextState -> Maybe.map .coordinates (List.head nextState.movesSoFar)
             Nothing -> Nothing
-
-
-maximumBy : (a -> comparable') -> List a -> Maybe a
-maximumBy translate list =
-    let
-        maxComparison =
-            \element currentMaxElement ->
-                if (translate element) < (translate currentMaxElement)
-                    then currentMaxElement
-                    else element
-    in
-        case list of
-            hd :: tl -> Just (List.foldl maxComparison hd tl)
-            [] -> Nothing
 
 
 score : GameState -> Int
@@ -59,6 +47,6 @@ nextGameStates gameState =
 availableCoordinates : GameState -> List Coordinates
 availableCoordinates gameState =
     let
-        isMoveTaken = \coordinates -> (Model.playerWhoMovedAt coordinates gameState) == Nothing
+        isMoveTaken = \coordinates -> (GameModel.playerAt coordinates gameState) == Nothing
     in
-        List.filter isMoveTaken (Model.boardCoordinates gameState)
+        List.filter isMoveTaken (GameModel.boardCoordinates gameState)

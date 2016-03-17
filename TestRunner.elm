@@ -2,22 +2,24 @@ module Main where
 
 import Signal exposing (Signal)
 
-import ElmTest exposing (..)
+import ElmTest exposing (Test, consoleRunner, suite)
 import Console exposing (IO, run)
 import Task
 
-import MinimaxTests
-import ModelTests
-import TestHelpersTests
-import UpdateTests
+import GameLogic.GameEndTests
+import GameLogic.NegamaxTests
+import GameLogic.UpdateStateTests
+import GameModelTests
+import UtilitiesTests
 
 tests : Test
 tests =
   suite "Tic Tac Toe tests"
-    [ MinimaxTests.all
-    , ModelTests.all
-    , TestHelpersTests.all
-    , UpdateTests.all
+    [ GameLogic.GameEndTests.all
+    , GameLogic.NegamaxTests.all
+    , GameLogic.UpdateStateTests.all
+    , GameModelTests.all
+    , UtilitiesTests.all
     ]
 
 console : IO ()

@@ -1,7 +1,7 @@
 import StartApp.Simple exposing (start)
 
-import Model
-import Update
+import GameModel as Model
+import GameLogic.UpdateState as Update
 import View.View as View
 
 

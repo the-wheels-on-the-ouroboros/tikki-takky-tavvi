@@ -1,10 +1,12 @@
-module MinimaxTests where
+module GameLogic.NegamaxTests where
 
-import ElmTest exposing (..)
+import ElmTest exposing (Test, assert, assertEqual, suite, test)
 
-import Minimax exposing (..)
-import Model exposing (Coordinates, GameState, Player(X, O), Status(InProgress, Tied, Won))
-import TestHelpers as Helpers exposing (x, o)
+import GameModel exposing (Coordinates, GameState, Player(X, O), Status(InProgress, Tied, Won))
+import TestHelpers exposing (x, o)
+import Utilities
+
+import GameLogic.Negamax exposing (bestMove, nextGameStates, score)
 
 
 all : Test
@@ -81,15 +83,6 @@ all =
                     assertEqual (Just (Coordinates 2 0)) (bestMove (GameState 3 X moves InProgress))
             ]
 
-        , suite "Getting the maximum element from a list when translated into comparable values"
-
-            [ test "Returns nothing if given an empty list" <|
-                assertEqual Nothing (maximumBy identity [])
-
-            , test "Returns the element that has the max value when given function is applied" <|
-                assertEqual (Just 0) (maximumBy ((*) -1) [0, 1, 2, 3])
-            ]
-
         , suite "Creating subsequent game states"
 
             [ test "Given an end game state, returns an empty list" <|
@@ -118,7 +111,7 @@ all =
                         ]
                 in
                     assert
-                        <| Helpers.areUnorderedElementsEqual
+                        <| Utilities.areElementsEqual
                             potentialGameStates
                             (nextGameStates (GameState 3 X moves InProgress))
             ]
