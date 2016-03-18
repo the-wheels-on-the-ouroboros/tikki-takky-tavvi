@@ -1,4 +1,4 @@
-module GameLogic.NegamaxTests where
+module GameLogic.ComputerPlayerTests where
 
 import ElmTest exposing (Test, assert, assertEqual, suite, test)
 
@@ -6,7 +6,7 @@ import GameModel exposing (Coordinates, GameState, Move, Player(X, O), Status(In
 import TestHelpers exposing (x, o)
 import Utilities
 
-import GameLogic.Negamax exposing (bestMove, makeMoveVsComputer, nextGameStates, score)
+import GameLogic.ComputerPlayer exposing (bestMove, makeMoveVsComputer, nextGameStates, score)
 
 
 all : Test

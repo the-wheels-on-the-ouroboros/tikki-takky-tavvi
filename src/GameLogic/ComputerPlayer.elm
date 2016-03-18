@@ -1,4 +1,4 @@
-module GameLogic.Negamax where
+module GameLogic.ComputerPlayer where
 
 import GameModel exposing (Coordinates, GameState, Status(InProgress, Tied, Won))
 import GameLogic.UpdateState as Update
