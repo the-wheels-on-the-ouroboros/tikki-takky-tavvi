@@ -1,8 +1,21 @@
-module GameLogic.Negamax where
+module GameLogic.ComputerPlayer where
 
 import GameModel exposing (Coordinates, GameState, Status(InProgress, Tied, Won))
 import GameLogic.UpdateState as Update
 import Utilities
+
+
+makeMoveVsComputer : Coordinates -> GameState -> GameState
+makeMoveVsComputer coordinates gameState =
+    let
+        nextGameState = Update.makeMove coordinates gameState
+    in
+        if (nextGameState.status /= InProgress) || (gameState == nextGameState)
+            then nextGameState
+            else
+                case bestMove nextGameState of
+                    Just computerMove -> Update.makeMove computerMove nextGameState
+                    _ -> nextGameState
 
 
 bestMove : GameState -> Maybe Coordinates
