@@ -22,7 +22,7 @@ bestMove : GameState -> Maybe Coordinates
 bestMove gameState =
     let
         bestNextGameState =
-            Utilities.maximumBy (\state -> -1 * (score state)) (nextGameStates gameState)
+            Utilities.maximumBy (\state -> -(score state)) (nextGameStates gameState)
     in
         case bestNextGameState of
             Just nextState -> Maybe.map .coordinates (List.head nextState.movesSoFar)
@@ -30,7 +30,11 @@ bestMove gameState =
 
 
 score : GameState -> Int
-score gameState =
+score gameState = scoreWithCutoff gameState -infinity infinity
+
+
+scoreWithCutoff : GameState -> Float -> Float -> Int
+scoreWithCutoff gameState bestForCurrentPlayer bestForOpponent =
     let
         numberOfAvailableMoves = (gameState.boardSize^2) - (List.length gameState.movesSoFar)
     in
@@ -39,12 +43,33 @@ score gameState =
             Won player ->
                 if player == gameState.currentPlayer
                     then numberOfAvailableMoves
-                    else -1 * numberOfAvailableMoves
+                    else -numberOfAvailableMoves
             InProgress ->
-                Maybe.withDefault 0
-                    <| List.maximum
-                    <| List.map (\state -> -1 * (score state))
-                    <| nextGameStates gameState
+                maxScore
+                    (nextGameStates gameState)
+                    bestForCurrentPlayer
+                    bestForOpponent
+                    (round -infinity)
+
+
+maxScore : List GameState -> Float -> Float -> Int -> Int
+maxScore gameStates bestForCurrentPlayer bestForOpponent bestSoFar =
+    case gameStates of
+        first :: rest ->
+            let
+                firstScore = -(scoreWithCutoff first -bestForOpponent -bestForCurrentPlayer)
+                newBestForCurrentPlayer = max bestForCurrentPlayer (toFloat firstScore)
+                newBestSoFar = max bestSoFar firstScore
+            in
+                if newBestForCurrentPlayer > bestForOpponent
+                    then newBestSoFar
+                    else maxScore rest newBestForCurrentPlayer bestForOpponent newBestSoFar
+        [] ->
+            bestSoFar
+
+
+infinity : Float
+infinity = (1/0)
 
 
 nextGameStates : GameState -> List GameState
