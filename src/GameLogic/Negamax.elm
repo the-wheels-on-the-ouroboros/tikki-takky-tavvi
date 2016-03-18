@@ -5,6 +5,19 @@ import GameLogic.UpdateState as Update
 import Utilities
 
 
+makeMoveVsComputer : Coordinates -> GameState -> GameState
+makeMoveVsComputer coordinates gameState =
+    let
+        nextGameState = Update.makeMove coordinates gameState
+    in
+        if (nextGameState.status /= InProgress) || (gameState == nextGameState)
+            then nextGameState
+            else
+                case bestMove nextGameState of
+                    Just computerMove -> Update.makeMove computerMove nextGameState
+                    _ -> nextGameState
+
+
 bestMove : GameState -> Maybe Coordinates
 bestMove gameState =
     let
