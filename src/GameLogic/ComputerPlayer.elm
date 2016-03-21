@@ -11,7 +11,8 @@ makeMoveVsComputer coordinates gameState =
         nextGameState = Update.makeMove coordinates gameState
     in
         if (nextGameState.status /= InProgress) || (gameState == nextGameState)
-            then nextGameState
+            then
+                nextGameState
             else
                 case bestMove nextGameState of
                     Just computerMove -> Update.makeMove computerMove nextGameState
@@ -21,8 +22,7 @@ makeMoveVsComputer coordinates gameState =
 bestMove : GameState -> Maybe Coordinates
 bestMove gameState =
     let
-        bestNextGameState =
-            Utilities.maximumBy (\state -> -1 * (score state)) (nextGameStates gameState)
+        bestNextGameState = Utilities.maximumBy score (nextGameStates gameState)
     in
         case bestNextGameState of
             Just nextState -> Maybe.map .coordinates (List.head nextState.movesSoFar)
@@ -31,20 +31,48 @@ bestMove gameState =
 
 score : GameState -> Int
 score gameState =
-    let
-        numberOfAvailableMoves = (gameState.boardSize^2) - (List.length gameState.movesSoFar)
-    in
-        case gameState.status of
-            Tied -> 0
-            Won player ->
-                if player == gameState.currentPlayer
-                    then numberOfAvailableMoves
-                    else -1 * numberOfAvailableMoves
-            InProgress ->
-                Maybe.withDefault 0
-                    <| List.maximum
-                    <| List.map (\state -> -1 * (score state))
-                    <| nextGameStates gameState
+    -(scoreWithCutoff gameState -infinity infinity)
+
+
+scoreWithCutoff : GameState -> Int -> Int -> Int
+scoreWithCutoff gameState bestForCurrentPlayer bestForOpponent =
+    case gameState.status of
+        Tied -> 0
+        Won player ->
+            if player == gameState.currentPlayer
+                then (numberOfAvailableMoves gameState) + 1
+                else -((numberOfAvailableMoves gameState) + 1)
+        InProgress ->
+            maxScore
+                (nextGameStates gameState)
+                bestForCurrentPlayer
+                bestForOpponent
+                -infinity
+
+
+numberOfAvailableMoves : GameState -> Int
+numberOfAvailableMoves gameState =
+    (gameState.boardSize^2) - (List.length gameState.movesSoFar)
+
+
+maxScore : List GameState -> Int -> Int -> Int -> Int
+maxScore gameStates bestForCurrentPlayer bestForOpponent bestSoFar =
+    case gameStates of
+        first :: rest ->
+            let
+                firstScore = -(scoreWithCutoff first -bestForOpponent -bestForCurrentPlayer)
+                newBestForCurrentPlayer = max bestForCurrentPlayer firstScore
+                newBestSoFar = max bestSoFar firstScore
+            in
+                if newBestForCurrentPlayer > bestForOpponent
+                    then newBestSoFar
+                    else maxScore rest newBestForCurrentPlayer bestForOpponent newBestSoFar
+        [] ->
+            bestSoFar
+
+
+infinity : Int
+infinity = round (1/0)
 
 
 nextGameStates : GameState -> List GameState
