@@ -22,8 +22,7 @@ makeMoveVsComputer coordinates gameState =
 bestMove : GameState -> Maybe Coordinates
 bestMove gameState =
     let
-        bestNextGameState =
-            Utilities.maximumBy (\state -> -(score state)) (nextGameStates gameState)
+        bestNextGameState = Utilities.maximumBy score (nextGameStates gameState)
     in
         case bestNextGameState of
             Just nextState -> Maybe.map .coordinates (List.head nextState.movesSoFar)
@@ -32,7 +31,7 @@ bestMove gameState =
 
 score : GameState -> Int
 score gameState =
-    scoreWithCutoff gameState -infinity infinity
+    -(scoreWithCutoff gameState -infinity infinity)
 
 
 scoreWithCutoff : GameState -> Int -> Int -> Int
