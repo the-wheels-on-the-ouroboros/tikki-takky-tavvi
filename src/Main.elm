@@ -1,13 +1,13 @@
 import StartApp.Simple exposing (start)
 
 import GameModel as Model
-import GameLogic.ComputerPlayer as Update
+import GameLogic.Update as Update
 import View.View as View
 
 
 main =
     start
         { model = Model.initialGameState
-        , update = Update.makeMoveVsComputer
+        , update = Update.update
         , view = View.render
         }

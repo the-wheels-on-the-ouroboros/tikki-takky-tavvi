@@ -5,11 +5,42 @@ import Text
 
 
 backgroundColor : Color
-backgroundColor = green
+backgroundColor = blue
 
 
 boardColor : Color
-boardColor = blue
+boardColor = green
+
+
+buttonColor : Color
+buttonColor = green
+
+
+buttonHeight : Int
+buttonHeight = buttonWidth // 3
+
+
+buttonWidth : Int
+buttonWidth = spaceSize + spaceMargin
+
+
+buttonTextStyle : Text.Style
+buttonTextStyle =
+    { defaultTextStyle
+    | height = (Just 30)
+    , color = gray
+    }
+
+
+defaultTextStyle : Text.Style
+defaultTextStyle =
+    { typeface = [ "Helvetica Neue", "Arial", "sans-serif" ]
+    , height = (Just 50)
+    , color = Color.rgb 0 0 0
+    , bold = True
+    , italic = False
+    , line = Nothing
+    }
 
 
 overlayColor : Color
@@ -17,14 +48,7 @@ overlayColor = transparentOrange
 
 
 overlayTextStyle : Text.Style
-overlayTextStyle =
-    { typeface = [ "Helvetica Neue", "Arial", "sans-serif" ]
-    , height = Just <| 50
-    , color = gray
-    , bold = True
-    , italic = False
-    , line = Nothing
-    }
+overlayTextStyle = { defaultTextStyle | color = gray }
 
 
 spaceColor : Color
@@ -40,14 +64,7 @@ spaceSize = 100
 
 
 spaceMarkStyle : Text.Style
-spaceMarkStyle =
-    { typeface = [ "Helvetica Neue", "Arial", "sans-serif" ]
-    , height = Just <| 50
-    , color = orange
-    , bold = True
-    , italic = False
-    , line = Nothing
-    }
+spaceMarkStyle = { defaultTextStyle | color = orange }
 
 
 blue : Color
