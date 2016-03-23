@@ -1,4 +1,4 @@
-module Utilities (areElementsEqual, count, maximumBy) where
+module Utilities (maximumBy) where
 
 
 maximumBy : (a -> comparable') -> List a -> Maybe a
@@ -13,14 +13,3 @@ maximumBy translate list =
         case list of
             hd :: tl -> Just (List.foldl maxComparison hd tl)
             [] -> Nothing
-
-
-areElementsEqual : List a -> List a -> Bool
-areElementsEqual list list' =
-    (List.length list) == (List.length list')
-        && List.all (\element -> (count element list) == (count element list')) list
-
-
-count : a -> List a -> Int
-count element list =
-    List.foldl (\element' total -> if element == element' then total + 1 else total) 0 list
