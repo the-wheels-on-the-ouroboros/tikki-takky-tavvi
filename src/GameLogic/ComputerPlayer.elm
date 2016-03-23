@@ -1,21 +1,21 @@
 module GameLogic.ComputerPlayer (bestMove, makeMoveVsComputer) where
 
 import GameModel exposing (Coordinates, GameState, Status(InProgress, Tied, Won))
-import GameLogic.UpdateState as Update
+import GameLogic.HandleTurn as HandleTurn
 import Utilities
 
 
 makeMoveVsComputer : Coordinates -> GameState -> GameState
 makeMoveVsComputer coordinates gameState =
     let
-        nextGameState = Update.makeMove coordinates gameState
+        nextGameState = HandleTurn.makeMove coordinates gameState
     in
         if (nextGameState.status /= InProgress) || (gameState == nextGameState)
             then
                 nextGameState
             else
                 case bestMove nextGameState of
-                    Just computerMove -> Update.makeMove computerMove nextGameState
+                    Just computerMove -> HandleTurn.makeMove computerMove nextGameState
                     _ -> nextGameState
 
 
@@ -78,7 +78,7 @@ infinity = round (1/0)
 nextGameStates : GameState -> List GameState
 nextGameStates gameState =
     let
-        makeMove = \coordinates -> Update.makeMove coordinates gameState
+        makeMove = \coordinates -> HandleTurn.makeMove coordinates gameState
     in
         case gameState.status of
             InProgress -> List.map makeMove (availableCoordinates gameState)

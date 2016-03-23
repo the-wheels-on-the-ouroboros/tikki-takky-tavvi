@@ -8,7 +8,8 @@ import Task
 
 import GameLogic.ComputerPlayerTests
 import GameLogic.GameEndTests
-import GameLogic.UpdateStateTests
+import GameLogic.HandleTurnTests
+import GameLogic.UpdateTests
 import GameModelTests
 import UtilitiesTests
 
@@ -17,7 +18,8 @@ tests =
   suite "Tic Tac Toe tests"
     [ GameLogic.ComputerPlayerTests.all
     , GameLogic.GameEndTests.all
-    , GameLogic.UpdateStateTests.all
+    , GameLogic.HandleTurnTests.all
+    , GameLogic.UpdateTests.all
     , GameModelTests.all
     , UtilitiesTests.all
     ]

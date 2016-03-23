@@ -1,4 +1,4 @@
-module GameLogic.UpdateStateTests (all) where
+module GameLogic.HandleTurnTests (all) where
 
 import ElmTest exposing (Test, assert, assertEqual, suite, test)
 
@@ -11,7 +11,7 @@ import GameModel exposing
     )
 import TestHelpers exposing (x, o)
 
-import GameLogic.UpdateState exposing (makeMove, nextPlayer)
+import GameLogic.HandleTurn exposing (makeMove, nextPlayer)
 
 
 all : Test
@@ -26,7 +26,7 @@ all =
                     <| makeMove (Coordinates 0 0)
                     <| GameState 3 X [] InProgress
 
-            , test "Returns a game state in which the other player is now the current player" <|
+            , test "Returns a game state in which the next player is now the current player" <|
                 assertEqual (nextPlayer X)
                     <| .currentPlayer
                     <| makeMove (Coordinates 0 0)
@@ -35,7 +35,7 @@ all =
             , test "Does not make move if a move already exists at coordinates" <|
                 let
                     gameState =
-                        GameState 3 (nextPlayer X) [ Move (Coordinates 0 0) X ] InProgress
+                        GameState 3 O [ Move (Coordinates 0 0) X ] InProgress
                 in
                     assertEqual gameState (makeMove (Coordinates 0 0) gameState)
 

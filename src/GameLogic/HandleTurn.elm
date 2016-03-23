@@ -1,4 +1,4 @@
-module GameLogic.UpdateState (makeMove, nextPlayer) where
+module GameLogic.HandleTurn (makeMove, nextPlayer) where
 
 import GameLogic.GameEnd as GameEnd
 import GameModel exposing
