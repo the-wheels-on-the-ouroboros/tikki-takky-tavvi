@@ -2,7 +2,13 @@ module GameLogic.UpdateStateTests (all) where
 
 import ElmTest exposing (Test, assert, assertEqual, suite, test)
 
-import GameModel exposing (Coordinates, GameState, Move, Player (X, O), Status (InProgress, Tied, Won))
+import GameModel exposing
+    ( Coordinates
+    , GameState
+    , Move
+    , Player (X, O)
+    , Status (InProgress, Tied, Won)
+    )
 import TestHelpers exposing (x, o)
 
 import GameLogic.UpdateState exposing (makeMove, nextPlayer)
