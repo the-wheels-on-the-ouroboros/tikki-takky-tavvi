@@ -1,11 +1,17 @@
-module View.GameBoard where
+module View.GameBoard (create) where
 
 import Graphics.Collage as Collage
 import Graphics.Element as Element exposing (Element)
 import Graphics.Input as Input
 import Text
 
-import GameModel exposing (Coordinates, GameState, Move, Player (X, O), Status (InProgress, Tied, Won))
+import GameModel exposing
+    ( Coordinates
+    , GameState
+    , Move
+    , Player (X, O)
+    , Status (InProgress, Tied, Won)
+    )
 import View.Overlay as Overlay
 import View.Styles as Styles
 import View.Utilities as ViewUtil

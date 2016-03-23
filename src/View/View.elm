@@ -1,4 +1,4 @@
-module View.View where
+module View.View (render) where
 
 import Graphics.Element as Element exposing (Element)
 import Html exposing (Html)

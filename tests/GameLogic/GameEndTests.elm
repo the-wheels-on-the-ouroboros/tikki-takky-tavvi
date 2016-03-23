@@ -1,4 +1,4 @@
-module GameLogic.GameEndTests where
+module GameLogic.GameEndTests (all) where
 
 import ElmTest exposing (Test, assertEqual, suite, test)
 

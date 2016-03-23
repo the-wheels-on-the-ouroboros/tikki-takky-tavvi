@@ -1,4 +1,4 @@
-module TestHelpers where
+module TestHelpers (x, o) where
 
 import GameModel exposing (Coordinates, Move, Player(X, O))
 

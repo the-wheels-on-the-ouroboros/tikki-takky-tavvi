@@ -1,11 +1,17 @@
-module GameLogic.UpdateStateTests where
+module GameLogic.UpdateStateTests (all) where
 
 import ElmTest exposing (Test, assert, assertEqual, suite, test)
 
-import GameModel exposing (Coordinates, GameState, Move, Player (X, O), Status (InProgress, Tied, Won))
+import GameModel exposing
+    ( Coordinates
+    , GameState
+    , Move
+    , Player (X, O)
+    , Status (InProgress, Tied, Won)
+    )
 import TestHelpers exposing (x, o)
 
-import GameLogic.UpdateState exposing (makeMove, otherPlayer)
+import GameLogic.UpdateState exposing (makeMove, nextPlayer)
 
 
 all : Test
@@ -21,14 +27,15 @@ all =
                     <| GameState 3 X [] InProgress
 
             , test "Returns a game state in which the other player is now the current player" <|
-                assertEqual (otherPlayer X)
+                assertEqual (nextPlayer X)
                     <| .currentPlayer
                     <| makeMove (Coordinates 0 0)
                     <| GameState 3 X [] InProgress
 
             , test "Does not make move if a move already exists at coordinates" <|
                 let
-                    gameState = GameState 3 (otherPlayer X) [ Move (Coordinates 0 0) X ] InProgress
+                    gameState =
+                        GameState 3 (nextPlayer X) [ Move (Coordinates 0 0) X ] InProgress
                 in
                     assertEqual gameState (makeMove (Coordinates 0 0) gameState)
 
@@ -89,13 +96,13 @@ all =
                             <| makeMove (Coordinates 0 2)
                             <| GameState 3 O moves InProgress
                 ]
-            ]
-        , suite "Getting the other player"
+            , suite "Getting the next player"
 
-            [ test "Given X, the other player is O" <|
-                assertEqual X (otherPlayer O)
+                [ test "Given X, the next player is O" <|
+                    assertEqual X (nextPlayer O)
 
-            , test "Given O, the other player is X" <|
-                assertEqual O (otherPlayer X)
+                , test "Given O, the next player is X" <|
+                    assertEqual O (nextPlayer X)
+                ]
             ]
         ]
