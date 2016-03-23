@@ -1,12 +1,12 @@
-module GameModel (
-        Coordinates,
-        GameState,
-        Move,
-        Player (X, O),
-        Status (InProgress, Tied, Won),
-        boardCoordinates,
-        initialGameState,
-        playerAt
+module GameModel
+    ( Coordinates
+    , GameState
+    , Move
+    , Player (X, O)
+    , Status (InProgress, Tied, Won)
+    , boardCoordinates
+    , initialGameState
+    , playerAt
     ) where
 
 

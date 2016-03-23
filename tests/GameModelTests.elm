@@ -2,14 +2,14 @@ module GameModelTests (all) where
 
 import ElmTest exposing (Test, assertEqual, suite, test)
 
-import GameModel exposing (
-        Coordinates,
-        GameState,
-        Move,
-        Player (X, O),
-        Status (InProgress, Tied, Won),
-        boardCoordinates,
-        playerAt
+import GameModel exposing
+    ( Coordinates
+    , GameState
+    , Move
+    , Player (X, O)
+    , Status (InProgress, Tied, Won)
+    , boardCoordinates
+    , playerAt
     )
 
 all : Test
