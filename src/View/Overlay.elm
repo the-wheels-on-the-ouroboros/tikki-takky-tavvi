@@ -1,4 +1,4 @@
-module View.Overlay where
+module View.Overlay (applyBoardOverlay) where
 
 import Graphics.Collage as Collage
 import Graphics.Element as Element exposing (Element)

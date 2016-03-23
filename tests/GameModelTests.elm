@@ -1,4 +1,4 @@
-module GameModelTests where
+module GameModelTests (all) where
 
 import ElmTest exposing (Test, assertEqual, suite, test)
 
