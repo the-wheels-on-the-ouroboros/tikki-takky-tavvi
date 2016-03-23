@@ -1,4 +1,4 @@
-module GameLogic.GameEnd where
+module GameLogic.GameEnd (isGameOver, winningPlayer) where
 
 import GameModel exposing (Coordinates, GameState, Move, Player(X, O))
 

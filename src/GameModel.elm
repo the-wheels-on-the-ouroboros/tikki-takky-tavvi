@@ -1,4 +1,13 @@
-module GameModel where
+module GameModel (
+        Coordinates,
+        GameState,
+        Move,
+        Player (X, O),
+        Status (InProgress, Tied, Won),
+        boardCoordinates,
+        initialGameState,
+        playerAt
+    ) where
 
 
 type Player = X | O

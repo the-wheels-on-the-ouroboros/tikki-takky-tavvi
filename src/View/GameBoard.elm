@@ -1,4 +1,4 @@
-module View.GameBoard where
+module View.GameBoard (create) where
 
 import Graphics.Collage as Collage
 import Graphics.Element as Element exposing (Element)

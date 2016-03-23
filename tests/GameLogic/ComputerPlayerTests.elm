@@ -1,4 +1,4 @@
-module GameLogic.ComputerPlayerTests where
+module GameLogic.ComputerPlayerTests (all) where
 
 import ElmTest exposing (Test, assert, assertEqual, assertNotEqual, suite, test)
 

@@ -1,4 +1,4 @@
-module View.Utilities where
+module View.Utilities (calculateBoardWidth, playerToString) where
 
 import GameModel exposing (GameState, Player (X, O))
 import View.Styles as Styles

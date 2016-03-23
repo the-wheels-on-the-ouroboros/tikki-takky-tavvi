@@ -1,4 +1,4 @@
-module GameLogic.UpdateState where
+module GameLogic.UpdateState (makeMove, nextPlayer) where
 
 import GameLogic.GameEnd as GameEnd
 import GameModel exposing (Coordinates, GameState, Move, Player(X, O), Status(InProgress, Tied, Won))
@@ -10,7 +10,7 @@ makeMove coordinates gameState =
         (InProgress, Nothing) ->
             updateGameStatus
                 { gameState |
-                    currentPlayer = otherPlayer gameState.currentPlayer,
+                    currentPlayer = nextPlayer gameState.currentPlayer,
                     movesSoFar = Move coordinates gameState.currentPlayer :: gameState.movesSoFar
                 }
         _ ->
@@ -28,8 +28,8 @@ updateGameStatus gameState =
                 else { gameState | status = InProgress }
 
 
-otherPlayer : Player -> Player
-otherPlayer player =
+nextPlayer : Player -> Player
+nextPlayer player =
     case player of
         X -> O
         O -> X
