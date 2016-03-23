@@ -1,4 +1,4 @@
-module GameLogic.ComputerPlayer where
+module GameLogic.ComputerPlayer (bestMove, makeMoveVsComputer) where
 
 import GameModel exposing (Coordinates, GameState, Status(InProgress, Tied, Won))
 import GameLogic.UpdateState as Update

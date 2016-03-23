@@ -1,8 +1,14 @@
-module GameLogic.ComputerPlayerTests where
+module GameLogic.ComputerPlayerTests (all) where
 
 import ElmTest exposing (Test, assert, assertEqual, assertNotEqual, suite, test)
 
-import GameModel exposing (Coordinates, GameState, Move, Player(X, O), Status(InProgress, Tied, Won))
+import GameModel exposing
+    ( Coordinates
+    , GameState
+    , Move
+    , Player(X, O)
+    , Status (InProgress, Tied, Won)
+    )
 import TestHelpers exposing (x, o)
 import Utilities
 

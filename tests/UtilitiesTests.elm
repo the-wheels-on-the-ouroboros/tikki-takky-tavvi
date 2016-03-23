@@ -1,4 +1,4 @@
-module UtilitiesTests where
+module UtilitiesTests (all) where
 
 import ElmTest exposing (Test, assert, assertEqual, suite, test)
 

@@ -1,4 +1,4 @@
-module Utilities where
+module Utilities (areElementsEqual, count, maximumBy) where
 
 
 maximumBy : (a -> comparable') -> List a -> Maybe a
