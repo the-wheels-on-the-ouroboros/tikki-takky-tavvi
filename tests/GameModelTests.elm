@@ -19,7 +19,7 @@ all =
         [ suite "Getting the board coordinates"
 
             [ test "A 3x3 board has 9 coordinates" <|
-                assertEqual 9 (List.length (boardCoordinates (GameState 3 X [] InProgress)))
+                assertEqual 9 (List.length (boardCoordinates (GameState 3 False X [] InProgress)))
 
             , test "A 3x3 board has coordinates from [0,0] to [2,2]" <|
                 let
@@ -29,18 +29,18 @@ all =
                         , (Coordinates 2 0), (Coordinates 2 1), (Coordinates 2 2)
                         ]
                 in
-                    assertEqual coordinates (boardCoordinates (GameState 3 X [] InProgress))
+                    assertEqual coordinates (boardCoordinates (GameState 3 False X [] InProgress))
             ]
         , suite "Getting the player who made a move" <|
 
             [ test "Returns Nothing if the is no move at the given coordinates" <|
                 assertEqual Nothing
                     <| playerAt (Coordinates 0 0)
-                    <| GameState 3 X [] InProgress
+                    <| GameState 3 False X [] InProgress
 
             , test "Returns the player who moved at the given coordinates" <|
                 assertEqual (Just X)
                     <| playerAt (Coordinates 0 0)
-                    <| GameState 3 X [ Move (Coordinates 0 0) X ] InProgress
+                    <| GameState 3 False X [ Move (Coordinates 0 0) X ] InProgress
             ]
         ]

@@ -17,18 +17,21 @@ update action gameState =
         MoveInput coordinates ->
             let
                 nextGameState = HandleTurn.makeMove coordinates gameState
-                effects =
-                    if nextGameState == gameState
-                        then Effects.none
-                        else makeComputerMove nextGameState
             in
-                ( nextGameState, effects )
+                if gameState.isComputerTurn || nextGameState == gameState
+                    then ( gameState, Effects.none )
+                    else ( { nextGameState | isComputerTurn = True }, makeComputerMove nextGameState )
         ComputerMove (Just coordinates) ->
-            ( HandleTurn.makeMove coordinates gameState, Effects.none )
+            let
+                nextGameState = HandleTurn.makeMove coordinates gameState
+            in
+                ( { nextGameState | isComputerTurn = False }, Effects.none )
         ComputerMove Nothing ->
-            ( gameState, Effects.none )
+            ( { gameState | isComputerTurn = False }, Effects.none )
         Reset ->
-            ( GameModel.initialGameState, Effects.none )
+            if gameState.isComputerTurn
+                then ( gameState, Effects.none )
+                else ( GameModel.initialGameState, Effects.none )
 
 
 makeComputerMove : GameState -> Effects Action
