@@ -5,19 +5,19 @@ import GameModel exposing
     ( Coordinates
     , GameState
     , Move
-    , Player(X, O)
-    , Status(InProgress, Tied, Won)
+    , Player (X, O)
+    , Status (InProgress, Tied, Won)
     )
 
 
 makeMove : Coordinates -> GameState -> GameState
 makeMove coordinates gameState =
-    case (gameState.status, GameModel.playerAt coordinates gameState) of
-        (InProgress, Nothing) ->
+    case ( gameState.status, GameModel.playerAt coordinates gameState ) of
+        ( InProgress, Nothing ) ->
             updateGameStatus
-                { gameState |
-                    currentPlayer = nextPlayer gameState.currentPlayer,
-                    movesSoFar = Move coordinates gameState.currentPlayer :: gameState.movesSoFar
+                { gameState
+                | currentPlayer = nextPlayer gameState.currentPlayer
+                , movesSoFar = Move coordinates gameState.currentPlayer :: gameState.movesSoFar
                 }
         _ ->
             gameState

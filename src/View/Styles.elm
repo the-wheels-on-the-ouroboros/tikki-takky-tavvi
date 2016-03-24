@@ -25,21 +25,17 @@ buttonWidth = spaceSize + spaceMargin
 
 
 buttonTextStyle : Text.Style
-buttonTextStyle =
-    { defaultTextStyle
-    | height = (Just 30)
-    , color = gray
-    }
+buttonTextStyle = { defaultTextStyle | height = (Just 30) }
 
 
 defaultTextStyle : Text.Style
 defaultTextStyle =
-    { typeface = [ "Helvetica Neue", "Arial", "sans-serif" ]
+    { bold = True
+    , color = gray
     , height = (Just 50)
-    , color = Color.rgb 0 0 0
-    , bold = True
     , italic = False
     , line = Nothing
+    , typeface = [ "Helvetica Neue", "Arial", "sans-serif" ]
     }
 
 
@@ -60,7 +56,7 @@ overlayColor = transparentOrange
 
 
 overlayTextStyle : Text.Style
-overlayTextStyle = { defaultTextStyle | color = gray }
+overlayTextStyle = defaultTextStyle
 
 
 spaceColor : Color
@@ -80,15 +76,11 @@ spaceMarkStyle = { defaultTextStyle | color = orange }
 
 
 titleHeight : Int
-titleHeight = buttonWidth // 2
+titleHeight = (spaceSize + spaceMargin) // 2
 
 
 titleTextStyle : Text.Style
-titleTextStyle =
-    { defaultTextStyle
-    | height = (Just 37)
-    , color = gray
-    }
+titleTextStyle = { defaultTextStyle | height = (Just 37) }
 
 
 blue : Color

@@ -44,7 +44,7 @@ initialGameState =
 boardCoordinates : GameState -> List Coordinates
 boardCoordinates gameState =
     let
-        indices = [0..(gameState.boardSize - 1)]
+        indices = [ 0 .. (gameState.boardSize - 1) ]
     in
         List.concatMap (\row -> List.map (\col -> Coordinates row col) indices) indices
 
@@ -52,5 +52,5 @@ boardCoordinates gameState =
 playerAt : Coordinates -> GameState -> Maybe Player
 playerAt coordinates gameState =
     case List.filter (\move -> move.coordinates == coordinates) gameState.movesSoFar of
-        move::_ -> Just move.player
+        move :: _ -> Just move.player
         _ -> Nothing

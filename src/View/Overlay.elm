@@ -32,16 +32,9 @@ gameTiedMessage = "You tied"
 
 
 overlay : Int -> String -> Element
-overlay elementSize message =
+overlay size message =
     let
-        background =
-            Collage.filled Styles.overlayColor
-                <| Collage.square
-                <| toFloat elementSize
-        text =
-            Collage.toForm
-                <| Element.centered
-                <| Text.style Styles.overlayTextStyle
-                <| Text.fromString message
+        background = ViewUtil.coloredSquare size Styles.overlayColor
+        text = Collage.toForm (ViewUtil.toText message Styles.overlayTextStyle)
     in
-        Collage.collage elementSize elementSize [ background, text ]
+        Collage.collage size size [ background, text ]

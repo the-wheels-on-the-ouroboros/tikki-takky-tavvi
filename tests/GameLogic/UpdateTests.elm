@@ -75,9 +75,7 @@ all =
                 let
                     gameState = GameState 3 X [] InProgress
                 in
-                    assertEqual
-                        gameState
-                        (getGameState (update (ComputerMove Nothing) gameState))
+                    assertEqual gameState (getGameState (update (ComputerMove Nothing) gameState))
 
             , test "Triggers no effects" <|
                 assertEqual Effects.none

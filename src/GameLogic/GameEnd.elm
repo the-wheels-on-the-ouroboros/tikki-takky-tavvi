@@ -9,16 +9,15 @@ winningPlayer gameState =
         winningLines = List.filter (isWinningLine gameState.boardSize) (getLines gameState)
     in
         case winningLines of
-            (move::_)::_ -> Just move.player
-            []::_ -> Nothing
-            [] -> Nothing
+            (move :: _) :: _ -> Just move.player
+            _ -> Nothing
 
 
 isGameOver : GameState -> Bool
 isGameOver gameState =
     let
         isGameWon = List.any (isWinningLine gameState.boardSize) (getLines gameState)
-        isGameTied = (gameState.boardSize^2) == (List.length gameState.movesSoFar)
+        isGameTied = gameState.boardSize^2 == (List.length gameState.movesSoFar)
     in
         isGameWon || isGameTied
 
@@ -26,7 +25,7 @@ isGameOver gameState =
 isWinningLine : Int -> List Move -> Bool
 isWinningLine lineLength line =
     case line of
-        firstMove::_ ->
+        firstMove :: _ ->
             (List.length line) == lineLength &&
                 List.all (\move -> move.player == firstMove.player) line
         _ ->
@@ -37,7 +36,7 @@ getLines : GameState -> List (List Move)
 getLines gameState =
     let
         maxIndex = gameState.boardSize - 1
-        indices = [0..maxIndex]
+        indices = [ 0 .. maxIndex ]
         moves = gameState.movesSoFar
     in
         List.concat

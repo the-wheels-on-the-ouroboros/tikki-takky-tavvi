@@ -1,18 +1,13 @@
 module View.GameBoard (create) where
 
-import Graphics.Collage as Collage
+import Color exposing (Color)
+import Graphics.Collage as Collage exposing (Form)
 import Graphics.Element as Element exposing (Element)
 import Graphics.Input as Input
 import Text
 
 import GameLogic.Update exposing (Action (MoveInput))
-import GameModel exposing
-    ( Coordinates
-    , GameState
-    , Move
-    , Player (X, O)
-    , Status (InProgress, Tied, Won)
-    )
+import GameModel exposing (Coordinates, GameState, Move, Player (X, O))
 import View.Overlay as Overlay
 import View.Styles as Styles
 import View.Utilities as ViewUtil
@@ -40,13 +35,14 @@ createBoardSpaces address gameState =
 createBoardSpace : Coordinates -> Signal.Address Action -> GameState -> Element
 createBoardSpace coordinates address gameState =
     let
-        paddedSize = Styles.spaceSize + Styles.spaceMargin
-        padding = Collage.filled Styles.boardColor (Collage.square (toFloat paddedSize))
-        background = Collage.filled Styles.spaceColor (Collage.square (toFloat Styles.spaceSize))
+        paddedSize =
+            Styles.spaceSize + Styles.spaceMargin
+        padding =
+            coloredSquare paddedSize Styles.boardColor
+        background =
+            coloredSquare Styles.spaceSize Styles.spaceColor
         playerMark =
-            Collage.toForm
-                <| createPlayerMark
-                <| GameModel.playerAt coordinates gameState
+            Collage.toForm (createPlayerMark (GameModel.playerAt coordinates gameState))
     in
         Input.clickable
             (Signal.message address (MoveInput coordinates))
@@ -59,3 +55,8 @@ createPlayerMark player =
         <| Text.style Styles.spaceMarkStyle
         <| Text.fromString
         <| ViewUtil.playerToString player
+
+
+coloredSquare : Int -> Color -> Form
+coloredSquare size color =
+    Collage.filled color (Collage.square (toFloat size))

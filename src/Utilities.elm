@@ -1,15 +1,15 @@
 module Utilities (maximumBy) where
 
 
-maximumBy : (a -> comparable') -> List a -> Maybe a
-maximumBy translate list =
+maximumBy : (a -> comparable) -> List a -> Maybe a
+maximumBy evaluate list =
     let
         maxComparison =
-            \element currentMaxElement ->
-                if (translate element) < (translate currentMaxElement)
-                    then currentMaxElement
+            \element currentMax ->
+                if (evaluate element) < (evaluate currentMax)
+                    then currentMax
                     else element
     in
         case list of
-            hd :: tl -> Just (List.foldl maxComparison hd tl)
+            head :: tail -> Just (List.foldl maxComparison head tail)
             [] -> Nothing

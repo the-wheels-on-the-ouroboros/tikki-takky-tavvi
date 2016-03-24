@@ -17,10 +17,12 @@ update action gameState =
         MoveInput coordinates ->
             let
                 nextGameState = HandleTurn.makeMove coordinates gameState
+                effects =
+                    if nextGameState == gameState
+                        then Effects.none
+                        else makeComputerMove nextGameState
             in
-                if nextGameState == gameState
-                    then ( nextGameState, Effects.none )
-                    else ( nextGameState, makeComputerMove nextGameState )
+                ( nextGameState, effects )
         ComputerMove (Just coordinates) ->
             ( HandleTurn.makeMove coordinates gameState, Effects.none )
         ComputerMove Nothing ->
