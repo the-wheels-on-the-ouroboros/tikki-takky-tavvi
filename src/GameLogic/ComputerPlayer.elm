@@ -36,11 +36,6 @@ scoreWithCutoff gameState bestForCurrentPlayer bestForOpponent =
                 -infinity
 
 
-numberOfAvailableMoves : GameState -> Int
-numberOfAvailableMoves gameState =
-    (gameState.boardSize^2) - (List.length gameState.movesSoFar)
-
-
 maxScore : List GameState -> Int -> Int -> Int -> Int
 maxScore gameStates bestForCurrentPlayer bestForOpponent bestSoFar =
     case gameStates of
@@ -55,6 +50,11 @@ maxScore gameStates bestForCurrentPlayer bestForOpponent bestSoFar =
                     else maxScore rest newBestForCurrentPlayer bestForOpponent newBestSoFar
         [] ->
             bestSoFar
+
+
+numberOfAvailableMoves : GameState -> Int
+numberOfAvailableMoves gameState =
+    gameState.boardSize^2 - (List.length gameState.movesSoFar)
 
 
 infinity : Int
