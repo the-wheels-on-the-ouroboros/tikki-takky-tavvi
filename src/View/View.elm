@@ -4,7 +4,7 @@ import Graphics.Element as Element exposing (Element, Position)
 import Html exposing (Html)
 
 import GameLogic.Update exposing (Action)
-import GameModel exposing (Coordinates, GameState)
+import GameModel exposing (GameState)
 import View.GameBoard as GameBoard
 import View.ResetButton as ResetButton
 import View.Styles as Styles

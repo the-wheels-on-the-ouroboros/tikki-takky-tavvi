@@ -7,20 +7,16 @@ import Text
 
 import GameLogic.Update exposing (Action (Reset))
 import View.Styles as Styles
+import View.Utilities as ViewUtil
 
 
 create : Signal.Address Action -> Element
 create address =
     let
+        text = Collage.toForm (ViewUtil.toText "Reset" Styles.buttonTextStyle)
         background =
-            Collage.filled
-                Styles.buttonColor
-                (Collage.rect (toFloat Styles.buttonWidth) (toFloat Styles.buttonHeight))
-        text =
-            Collage.toForm
-                <| Element.centered
-                <| Text.style Styles.buttonTextStyle
-                <| Text.fromString "Reset"
+            Collage.filled Styles.buttonColor
+                <| Collage.rect (toFloat Styles.buttonWidth) (toFloat Styles.buttonHeight)
     in
         Input.clickable
             (Signal.message address Reset)

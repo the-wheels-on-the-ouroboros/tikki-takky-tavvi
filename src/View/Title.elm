@@ -7,15 +7,13 @@ import Text
 
 import GameLogic.Update exposing (Action (Reset))
 import View.Styles as Styles
+import View.Utilities as ViewUtil
 
 
 create : Element
 create =
     let
-        text =
-            Element.centered
-                <| Text.style Styles.titleTextStyle
-                <| Text.fromString " Elm Tic Tac Toe"
+        text = ViewUtil.toText " Elm Tic Tac Toe" Styles.titleTextStyle
         logoBackgroundSize = round (1.1 * (toFloat Styles.logoHeight))
         logo =
             Element.color Styles.logoBackgroundColor
