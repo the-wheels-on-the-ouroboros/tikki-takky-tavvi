@@ -43,6 +43,18 @@ defaultTextStyle =
     }
 
 
+logoBackgroundColor : Color
+logoBackgroundColor = white
+
+
+logoHeight : Int
+logoHeight = round ((2/3) * (toFloat titleHeight))
+
+
+logoUrl : String
+logoUrl = "https://avatars0.githubusercontent.com/u/4359353?v=3&s=280"
+
+
 overlayColor : Color
 overlayColor = transparentOrange
 
@@ -67,6 +79,18 @@ spaceMarkStyle : Text.Style
 spaceMarkStyle = { defaultTextStyle | color = orange }
 
 
+titleHeight : Int
+titleHeight = buttonWidth // 2
+
+
+titleTextStyle : Text.Style
+titleTextStyle =
+    { defaultTextStyle
+    | height = (Just 37)
+    , color = gray
+    }
+
+
 blue : Color
 blue = Color.rgb 96 181 204
 
@@ -84,3 +108,6 @@ orange = Color.rgb 240 173 0
 
 transparentOrange : Color
 transparentOrange = Color.rgba 240 173 0 0.75
+
+white : Color
+white = Color.rgb 255 255 255
