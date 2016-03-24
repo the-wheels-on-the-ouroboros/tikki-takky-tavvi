@@ -39,11 +39,8 @@ all =
                     <| GameState 3 X [] InProgress
 
             , test "Returns the player who moved at the given coordinates" <|
-                let
-                    gameState = GameState 3 X [ Move (Coordinates 0 0) X ] InProgress
-                in
-                    assertEqual (Just X)
-                        <| playerAt (Coordinates 0 0)
-                        <| GameState 3 X [ Move (Coordinates 0 0) X ] InProgress
+                assertEqual (Just X)
+                    <| playerAt (Coordinates 0 0)
+                    <| GameState 3 X [ Move (Coordinates 0 0) X ] InProgress
             ]
         ]

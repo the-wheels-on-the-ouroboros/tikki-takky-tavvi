@@ -14,7 +14,10 @@ all =
             [ test "Returns nothing if given an empty list" <|
                 assertEqual Nothing (maximumBy identity [])
 
+            , test "Returns element if given one-element list" <|
+                assertEqual (Just 1) (maximumBy identity [ 1 ])
+
             , test "Returns the element that has the max value when given function is applied" <|
-                assertEqual (Just 0) (maximumBy ((*) -1) [0, 1, 2, 3])
+                assertEqual (Just 0) (maximumBy ((*) -1) [ 0, 1, 2, 3 ])
             ]
         ]

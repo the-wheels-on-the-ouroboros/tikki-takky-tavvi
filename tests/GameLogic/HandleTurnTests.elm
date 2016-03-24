@@ -16,7 +16,7 @@ import GameLogic.HandleTurn exposing (makeMove, nextPlayer)
 
 all : Test
 all =
-    suite "Updating the game state"
+    suite "Handling a turn"
 
         [ suite "Making a move"
 
@@ -34,8 +34,7 @@ all =
 
             , test "Does not make move if a move already exists at coordinates" <|
                 let
-                    gameState =
-                        GameState 3 O [ Move (Coordinates 0 0) X ] InProgress
+                    gameState = GameState 3 O [ Move (Coordinates 0 0) X ] InProgress
                 in
                     assertEqual gameState (makeMove (Coordinates 0 0) gameState)
 

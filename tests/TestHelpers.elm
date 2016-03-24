@@ -1,6 +1,6 @@
 module TestHelpers (x, o) where
 
-import GameModel exposing (Coordinates, Move, Player(X, O))
+import GameModel exposing (Coordinates, Move, Player (X, O))
 
 
 x : Int -> Int -> Move
