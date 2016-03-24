@@ -2,110 +2,18 @@ module GameLogic.ComputerPlayerTests (all) where
 
 import ElmTest exposing (Test, assert, assertEqual, assertNotEqual, suite, test)
 
-import GameModel exposing
-    ( Coordinates
-    , GameState
-    , Move
-    , Player(X, O)
-    , Status (InProgress, Tied, Won)
-    )
+import GameModel exposing (Coordinates, GameState, Move, Player (X, O), Status (InProgress, Tied))
 import TestHelpers exposing (x, o)
 import Utilities
 
-import GameLogic.ComputerPlayer exposing (bestMove, makeMoveVsComputer)
+import GameLogic.ComputerPlayer exposing (bestMove)
 
 
 all : Test
 all =
     suite "Applying the minimax algorithm"
 
-        [ suite "Making a move versus a computer opponent"
-
-            [ test "Makes given move" <|
-                let
-                    moves =
-                        [ x 0 0, x 0 1, o 0 2
-                        , o 1 0, o 1 1, x 1 2
-                        , x 2 0
-                        ]
-                in
-                    assert
-                        <| List.any ((==) (Move (Coordinates 2 1) O))
-                        <| .movesSoFar
-                        <| makeMoveVsComputer (Coordinates 2 1) (GameState 3 O moves InProgress)
-
-            , test "Makes a subsequent move for the computer" <|
-                let
-                    moves =
-                        [ x 0 0, x 0 1, o 0 2
-                        , o 1 0, o 1 1, x 1 2
-                        , x 2 0
-                        ]
-                in
-                    assertEqual (x 2 2 :: o 2 1 :: moves)
-                        <| .movesSoFar
-                        <| makeMoveVsComputer (Coordinates 2 1)
-                        <| GameState 3 O moves InProgress
-
-            , test "The original current player is the current player after both moves" <|
-                let
-                    player = O
-                    moves =
-                        [ x 0 0, x 0 1, o 0 2
-                        , o 1 0, o 1 1, x 1 2
-                        , x 2 0
-                        ]
-                in
-                    assertEqual player
-                        <| .currentPlayer
-                        <| makeMoveVsComputer (Coordinates 2 1)
-                        <| GameState 3 player moves InProgress
-
-            , test "No second move is made if the first move wins the game" <|
-                let
-                    moves =
-                        [ x 0 0, x 0 1
-                        , o 1 0, o 1 1
-                        ]
-                in
-                    assertEqual (x 0 2 :: moves)
-                        <| .movesSoFar
-                        <| makeMoveVsComputer (Coordinates 0 2)
-                        <| GameState 3 X moves InProgress
-
-            , test "No second move is made if the first move ties the game" <|
-                let
-                    moves =
-                        [ x 0 0, x 0 1, o 0 2
-                        , o 1 0, o 1 1, x 1 2
-                        , x 2 0, o 2 1
-                        ]
-                in
-                    assertEqual (x 2 2 :: moves)
-                        <| .movesSoFar
-                        <| makeMoveVsComputer (Coordinates 2 2)
-                        <| GameState 3 X moves InProgress
-
-            , test "Does not make any moves if a move already exists at coordinates" <|
-                let
-                    gameState = GameState 3 O [ Move (Coordinates 0 0) X ] InProgress
-                in
-                    assertEqual gameState (makeMoveVsComputer (Coordinates 0 0) gameState)
-
-            , test "Does not make any moves if given game state status is Tied" <|
-                let
-                    gameState = GameState 3 X [] Tied
-                in
-                    assertEqual gameState (makeMoveVsComputer (Coordinates 0 0) gameState)
-
-            , test "Does not make any moves if given game state status is Won" <|
-                let
-                    gameState = GameState 3 X [] (Won X)
-                in
-                    assertEqual gameState (makeMoveVsComputer (Coordinates 0 0) gameState)
-            ]
-
-        , suite "Getting the best next move"
+        [ suite "Getting the best next move"
 
             [ test "Returns nothing when no moves are possible" <|
                 let

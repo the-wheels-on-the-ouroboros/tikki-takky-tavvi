@@ -1,22 +1,8 @@
-module GameLogic.ComputerPlayer (bestMove, makeMoveVsComputer) where
+module GameLogic.ComputerPlayer (bestMove) where
 
-import GameModel exposing (Coordinates, GameState, Status(InProgress, Tied, Won))
+import GameModel exposing (Coordinates, GameState, Status (InProgress, Tied, Won))
 import GameLogic.HandleTurn as HandleTurn
 import Utilities
-
-
-makeMoveVsComputer : Coordinates -> GameState -> GameState
-makeMoveVsComputer coordinates gameState =
-    let
-        nextGameState = HandleTurn.makeMove coordinates gameState
-    in
-        if (nextGameState.status /= InProgress) || (gameState == nextGameState)
-            then
-                nextGameState
-            else
-                case bestMove nextGameState of
-                    Just computerMove -> HandleTurn.makeMove computerMove nextGameState
-                    _ -> nextGameState
 
 
 bestMove : GameState -> Maybe Coordinates
