@@ -5,8 +5,8 @@ import GameModel exposing
     ( Coordinates
     , GameState
     , Move
-    , Player(X, O)
-    , Status(InProgress, Tied, Won)
+    , Player (X, O)
+    , Status (InProgress, Tied, Won)
     )
 
 
