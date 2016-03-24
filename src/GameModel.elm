@@ -30,6 +30,7 @@ type alias Move =
 
 type alias GameState =
     { boardSize : Int
+    , isComputerTurn : Bool
     , currentPlayer : Player
     , movesSoFar : List Move
     , status : Status
@@ -38,7 +39,7 @@ type alias GameState =
 
 initialGameState : GameState
 initialGameState =
-    GameState 3 X [] InProgress
+    GameState 3 False X [] InProgress
 
 
 boardCoordinates : GameState -> List Coordinates

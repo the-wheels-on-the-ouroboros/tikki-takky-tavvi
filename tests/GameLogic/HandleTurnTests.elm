@@ -24,29 +24,29 @@ all =
                 assertEqual [ Move (Coordinates 0 0) X ]
                     <| .movesSoFar
                     <| makeMove (Coordinates 0 0)
-                    <| GameState 3 X [] InProgress
+                    <| GameState 3 False X [] InProgress
 
             , test "Returns a game state in which the next player is now the current player" <|
                 assertEqual (nextPlayer X)
                     <| .currentPlayer
                     <| makeMove (Coordinates 0 0)
-                    <| GameState 3 X [] InProgress
+                    <| GameState 3 False X [] InProgress
 
             , test "Does not make move if a move already exists at coordinates" <|
                 let
-                    gameState = GameState 3 O [ Move (Coordinates 0 0) X ] InProgress
+                    gameState = GameState 3 False O [ Move (Coordinates 0 0) X ] InProgress
                 in
                     assertEqual gameState (makeMove (Coordinates 0 0) gameState)
 
             , test "Does not make move if given game state status is Tied" <|
                 let
-                    gameState = GameState 3 X [] Tied
+                    gameState = GameState 3 False X [] Tied
                 in
                     assertEqual gameState (makeMove (Coordinates 0 0) gameState)
 
             , test "Does not make move if given game state status is Won" <|
                 let
-                    gameState = GameState 3 X [] (Won X)
+                    gameState = GameState 3 False X [] (Won X)
                 in
                     assertEqual gameState (makeMove (Coordinates 0 0) gameState)
 
@@ -56,7 +56,7 @@ all =
                     assertEqual InProgress
                         <| .status
                         <| makeMove (Coordinates 0 0)
-                        <| GameState 3 X [] InProgress
+                        <| GameState 3 False X [] InProgress
 
                 , test "Game has status Tied if game is tied after move is made" <|
                     let
@@ -69,7 +69,7 @@ all =
                         assertEqual Tied
                             <| .status
                             <| makeMove (Coordinates 2 2)
-                            <| GameState 3 X moves InProgress
+                            <| GameState 3 False X moves InProgress
 
                 , test "Game has status Won X if player X won the game" <|
                     let
@@ -81,7 +81,7 @@ all =
                         assertEqual (Won X)
                             <| .status
                             <| makeMove (Coordinates 0 2)
-                            <| GameState 3 X moves InProgress
+                            <| GameState 3 False X moves InProgress
 
                 , test "Game has status Won O if player O won the game" <|
                     let
@@ -93,7 +93,7 @@ all =
                         assertEqual (Won O)
                             <| .status
                             <| makeMove (Coordinates 0 2)
-                            <| GameState 3 O moves InProgress
+                            <| GameState 3 False O moves InProgress
                 ]
             , suite "Getting the next player"
 

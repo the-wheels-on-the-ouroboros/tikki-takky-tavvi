@@ -20,7 +20,7 @@ all =
                         [ x 0 0, x 0 1, x 0 2
                         , o 1 0, o 1 1
                         ]
-                    gameState = GameState 3 O moves (Won X)
+                    gameState = GameState 3 False O moves (Won X)
                 in
                     assertEqual True (isGameOver gameState)
 
@@ -32,10 +32,10 @@ all =
                         , x 2 0, o 2 1, x 2 2
                         ]
                 in
-                    assertEqual True (isGameOver (GameState 3 O moves Tied))
+                    assertEqual True (isGameOver (GameState 3 False O moves Tied))
 
             , test "Returns false if no moves have been made" <|
-                assertEqual False (isGameOver (GameState 3 X [] InProgress))
+                assertEqual False (isGameOver (GameState 3 False X [] InProgress))
 
             , test "Returns false if the game has not been won or tied" <|
                 let
@@ -43,9 +43,9 @@ all =
                         [ x 0 0, o 0 1, x 0 2
                         , o 1 0, x 1 1
                         ]
-                    gameState = GameState 3 O moves InProgress
+                    gameState = GameState 3 False O moves InProgress
                 in
-                    assertEqual False (isGameOver (GameState 3 O moves InProgress))
+                    assertEqual False (isGameOver (GameState 3 False O moves InProgress))
 
             , test "Result does not depend on game status" <|
                 let
@@ -54,14 +54,14 @@ all =
                         , o 1 0, x 1 1
                         ]
                     gameStates =
-                        List.map (GameState 3 O moves) [ InProgress, Tied, (Won X), (Won O) ]
+                        List.map (GameState 3 False O moves) [ InProgress, Tied, (Won X), (Won O) ]
                 in
                     assert (List.all (not << isGameOver) gameStates)
             ]
         , suite "Getting the winning player"
 
             [ test "Returns nothing if the game is not over" <|
-                assertEqual Nothing (winningPlayer (GameState 3 X [] InProgress))
+                assertEqual Nothing (winningPlayer (GameState 3 False X [] InProgress))
 
             , test "Returns nothing if the game is tied" <|
                 let
@@ -71,7 +71,7 @@ all =
                         , x 2 0, o 2 1, x 2 2
                         ]
                 in
-                    assertEqual Nothing (winningPlayer (GameState 3 X moves Tied))
+                    assertEqual Nothing (winningPlayer (GameState 3 False X moves Tied))
 
             , test "Returns player X if they won the game" <|
                 let
@@ -80,7 +80,7 @@ all =
                         , o 1 0, o 1 1
                         ]
                 in
-                    assertEqual (Just X) (winningPlayer (GameState 3 O moves (Won X)))
+                    assertEqual (Just X) (winningPlayer (GameState 3 False O moves (Won X)))
 
             , test "Returns player O if they won the game" <|
                 let
@@ -89,7 +89,7 @@ all =
                         , x 1 0, x 1 1
                         ]
                 in
-                assertEqual (Just O) (winningPlayer (GameState 3 X moves (Won O)))
+                assertEqual (Just O) (winningPlayer (GameState 3 False X moves (Won O)))
 
             , test "Result does not depend on game status" <|
                 let
@@ -98,7 +98,7 @@ all =
                         , o 1 0, x 1 1
                         ]
                     gameStates =
-                        List.map (GameState 3 O moves) [ InProgress, Tied, (Won X), (Won O) ]
+                        List.map (GameState 3 False O moves) [ InProgress, Tied, (Won X), (Won O) ]
                 in
                     assert (List.all (\state -> (winningPlayer state) == Nothing) gameStates)
 
