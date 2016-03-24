@@ -8,20 +8,16 @@ import Utilities
 bestMove : GameState -> Maybe Coordinates
 bestMove gameState =
     let
-        bestNextGameState = Utilities.maximumBy score (nextGameStates gameState)
+        bestNextGameState =
+            snd (negamax (nextGameStates gameState) -infinity infinity ( -infinity, Nothing ))
     in
         case bestNextGameState of
             Just nextState -> Maybe.map .coordinates (List.head nextState.movesSoFar)
             Nothing -> Nothing
 
 
-score : GameState -> Int
-score gameState =
-    -(scoreWithCutoff gameState -infinity infinity)
-
-
-scoreWithCutoff : GameState -> Int -> Int -> Int
-scoreWithCutoff gameState bestForCurrentPlayer bestForOpponent =
+score : GameState -> Int -> Int -> Int
+score gameState bestForCurrentPlayer bestForOpponent =
     case gameState.status of
         Tied -> 0
         Won player ->
@@ -29,25 +25,29 @@ scoreWithCutoff gameState bestForCurrentPlayer bestForOpponent =
                 then (numberOfAvailableMoves gameState) + 1
                 else -((numberOfAvailableMoves gameState) + 1)
         InProgress ->
-            maxScore
-                (nextGameStates gameState)
-                bestForCurrentPlayer
-                bestForOpponent
-                -infinity
+            fst
+                (negamax
+                    (nextGameStates gameState)
+                    bestForCurrentPlayer
+                    bestForOpponent
+                    ( -infinity, Nothing ))
 
 
-maxScore : List GameState -> Int -> Int -> Int -> Int
-maxScore gameStates bestForCurrentPlayer bestForOpponent bestSoFar =
+negamax : List GameState -> Int -> Int -> (Int, Maybe GameState) -> (Int, Maybe GameState)
+negamax gameStates bestForCurrentPlayer bestForOpponent bestSoFar =
     case gameStates of
         first :: rest ->
             let
-                firstScore = -(scoreWithCutoff first -bestForOpponent -bestForCurrentPlayer)
+                firstScore = -(score first -bestForOpponent -bestForCurrentPlayer)
                 newBestForCurrentPlayer = max bestForCurrentPlayer firstScore
-                newBestSoFar = max bestSoFar firstScore
+                newBestSoFar =
+                    if firstScore > (fst bestSoFar)
+                        then ( firstScore, Just first )
+                        else bestSoFar
             in
                 if newBestForCurrentPlayer > bestForOpponent
                     then newBestSoFar
-                    else maxScore rest newBestForCurrentPlayer bestForOpponent newBestSoFar
+                    else negamax rest newBestForCurrentPlayer bestForOpponent newBestSoFar
         [] ->
             bestSoFar
 

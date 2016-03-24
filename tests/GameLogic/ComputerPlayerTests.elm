@@ -54,10 +54,11 @@ all =
                     , o 1 0
                     , x 2 0, o 2 1
                     ]
+                moveMade = bestMove (GameState 3 False X moves InProgress)
             in
-                assertEqual
-                    (Just (Coordinates 1 1))
-                    (bestMove (GameState 3 False X moves InProgress))
+                assert
+                    (moveMade == (Just (Coordinates 1 1))
+                        || moveMade == (Just (Coordinates 0 2)))
 
         , test "Chooses a winning move over a blocking move" <|
             let
